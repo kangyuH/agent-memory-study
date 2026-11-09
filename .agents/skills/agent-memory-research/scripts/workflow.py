@@ -19,7 +19,7 @@ from outline import WorkflowError, ordered, parse_outline, scope, select, sha256
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 STATES = ("UNPLANNED", *gates.STAGES)
 START_MODES = ("plan", "research", "batch")
 PAUSES = {"tool": "BLOCKED", "source": "BLOCKED", "quality": "NEEDS_REVISION"}
@@ -90,7 +90,9 @@ def active_files(run_dir, run):
                       and candidate.is_file() and not candidate.is_symlink()
                       and sha256(candidate) == item["sha256"], f"检查点产物丢失或变更 {name}")
         files[name] = candidate
-    expected = {name for stage in STATES[1:STATES.index(run["checkpoint"]) + 1] for name in gates.STAGES[stage]}
+    contract = gates.stages(run)
+    completed = tuple(contract)[: ("UNPLANNED", *contract).index(run["checkpoint"])]
+    expected = {name for stage in completed for name in contract[stage]}
     gates.require(set(files) == expected, "检查点产物清单不完整")
     return files
 
@@ -105,7 +107,8 @@ def assert_inputs(run_dir, run):
 def next_stage(run):
     if run["state"] != run["checkpoint"] or run["checkpoint"] == "ACCEPTED":
         return None
-    return STATES[STATES.index(run["checkpoint"]) + 1]
+    states = ("UNPLANNED", *gates.stages(run))
+    return states[states.index(run["checkpoint"]) + 1]
 
 
 def inbox(run_dir, run):
@@ -120,17 +123,19 @@ def describe(run_dir, run):
     summary = {
         "run_dir": str(run_dir), "run_id": run_dir.name,
         "episode": run["parameters"]["episode"], "parameters": run["parameters"],
+        "schema": run.get("schema", 1),
         "state": run["state"], "checkpoint": run["checkpoint"],
         "next_stage": stage, "work_dir": str(work) if work else None,
-        "attempt": len(run["events"]), "expected_files": list(gates.STAGES[stage]) if stage else [],
+        "attempt": len(run["events"]), "expected_files": list(gates.stages(run)[stage]) if stage else [],
         "scope_input": str(run_dir / "scope_input.json"),
         "artifacts": {name: {**record, "path": str(run_dir / record["path"])}
                       for name, record in run["artifacts"].items()},
         "revisions": run["revisions"], "last_event": run["events"][-1],
         "last_failed_check": (run.get("failed_checks") or [None])[-1],
     }
-    if stage in {"RESEARCH_REVIEWED", "FINAL_REVIEWED"}:
-        names = gates.review_files("research" if stage == "RESEARCH_REVIEWED" else "final")
+    if stage in {"RESEARCH_REVIEWED", "MATERIALS_REVIEWED", "FINAL_REVIEWED"}:
+        kind = "final" if stage == "FINAL_REVIEWED" else "research"
+        names = gates.review_files(kind, run)
         summary["reviewed_sha256"] = {name: run["artifacts"][name]["sha256"] for name in names}
     return summary
 
@@ -146,7 +151,8 @@ def accepted_runs(output, outline_sha, as_of):
     for path in sorted((output / "runs").glob("EP*/[0-9a-f]*/manifest.json")):
         run = read_run(path.parent)
         parameters = run["parameters"]
-        if (run["state"] == "ACCEPTED" and parameters["outline_sha256"] == outline_sha
+        if (run.get("schema", 1) == gates.SCHEMA and run["state"] == "ACCEPTED"
+                and parameters["outline_sha256"] == outline_sha
                 and parameters["as_of_date"] == as_of):
             files = active_files(path.parent, run)
             gates.check("ACCEPTED", files, run)
@@ -249,7 +255,7 @@ def start_command(args):
         write_json(scope_path, bounds)
         write_index(index, output)
         run = {
-            "schema": 1, "created_at": now(), "mode": args.mode, "parameters": parameters,
+            "schema": gates.SCHEMA, "created_at": now(), "mode": args.mode, "parameters": parameters,
             "scope_sha256": sha256(scope_path), "prerequisites": index["episodes"][episode]["prerequisites"],
             "state": "UNPLANNED", "checkpoint": "UNPLANNED", "revisions": 0, "artifacts": {}, "events": [],
         }
@@ -332,6 +338,12 @@ def rewind(args, run):
 def release(run_dir, run, files):
     gates.require(run["state"] == "ACCEPTED", "只能导出已验收的资料包")
     gates.check("ACCEPTED", files, run)
+    legacy = gates.stages(run) is gates.LEGACY_STAGES
+    coverage_counts = None
+    if not legacy:
+        coverage_counts = dict.fromkeys(("covered", "partial", "unresolved"), 0)
+        for row in gates.read_json(files["coverage.json"]):
+            coverage_counts[row["status"]] += 1
     version = fingerprint({name: sha256(path) for name, path in files.items()})[:16]
     destination = run_dir / "releases" / version
     destination.parent.mkdir(exist_ok=True)
@@ -340,6 +352,9 @@ def release(run_dir, run, files):
         gates.require(package["version"] == version and set(package["artifacts"]) == set(files)
                       and all(sha256(destination / name) == record["sha256"] == sha256(files[name])
                               for name, record in package["artifacts"].items()), "已有导出包损坏")
+        if not legacy:
+            gates.require(package.get("schema") == gates.SCHEMA and package.get("coverage_counts") == coverage_counts,
+                          "已有导出包的覆盖统计与研究资料不一致")
     else:
         with tempfile.TemporaryDirectory(dir=destination.parent) as directory:
             temporary = Path(directory) / "package"
@@ -354,9 +369,17 @@ def release(run_dir, run, files):
                 "audits": [gates.read_json(files[name]) for name in ("review_research.json", "review_final.json")],
                 "artifacts": {name: {"path": name, "sha256": sha256(path)} for name, path in files.items()},
             }
+            if not legacy:
+                manifest["schema"] = gates.SCHEMA
+                manifest["coverage_counts"] = coverage_counts
             write_json(temporary / "manifest.json", manifest)
             temporary.rename(destination)
-    return {"release_dir": str(destination), "version": version, "notebooklm_input": "podcast_source.md"}
+    result = {"release_dir": str(destination), "version": version}
+    if legacy:
+        result["notebooklm_input"] = "podcast_source.md"
+    else:
+        result["primary_document"] = "research.md"
+    return result
 
 
 def existing_command(args):
@@ -372,6 +395,7 @@ def existing_command(args):
             return describe(run_dir, run)
         if command == "release":
             return release(run_dir, run, files)
+        gates.require(run.get("schema", 1) == gates.SCHEMA, "历史运行支持查询和导出，请以现行规则启动新运行")
         assert_inputs(run_dir, run)
         if command == "conflicts":
             gates.require("concepts.json" in files, "请先建立证据账本和概念登记")
@@ -422,7 +446,7 @@ def cli():
     start.add_argument("--mode", choices=START_MODES, default="research")
     start.add_argument("--depth", choices=("deep", "focused"), default="deep")
     start.add_argument("--writer-id", default="codex-writer")
-    start.add_argument("--review-profile", choices=gates.PROFILES, default="standard-v1")
+    start.add_argument("--review-profile", choices=gates.PROFILES, default="standard-v2")
     start.add_argument("--max-revisions", type=int, default=2)
     start.add_argument("--force-refresh-sources", action="store_true")
     start.add_argument("--refresh-id")
