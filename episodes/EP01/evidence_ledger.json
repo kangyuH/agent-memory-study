@@ -1,0 +1,1085 @@
+[
+  {
+    "claim_id": "C01",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q01",
+      "Q08"
+    ],
+    "statement": "1990 年 ATIS 试点用自发语音询问航班资料，把可回答内容锚定到固定 OAG 关系数据库及任务情境。试点明确排除酒店和租车等数据库没有的信息。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "自发表达可以超出设计者预写句式，任务和后端约束仍有明确范围。",
+    "limitation": "语料采集设计不能代表所有早期系统，也不是跨会话记忆测试。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S01",
+        "locator": "Introduction、Corpus Design、Corpus Collection",
+        "note": "固定关系数据、场景设计和排除项。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C02",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q01",
+      "Q02",
+      "Q05"
+    ],
+    "statement": "PEGASUS 把语音理解产生的语义框架映射到既有 EAASY SABRE 命令。System Manager 补问必要信息，解析与暂存后端结果及菜单项，局部筛选结果，并在尝试预订前检查可用性。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "系统可在本地增加下午出发等筛选条件，说明前端能力并不完全等于后端命令集合。",
+    "limitation": "这一系统说明了任务内可操作状态和缓存，未给出跨会话偏好机制的通用实验。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S02",
+        "locator": "pp. 202–204，System Manager、Fig. 2",
+        "note": "确认输入框架、后端协议、澄清、临时缓存、筛选与预订检查。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C03",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q01",
+      "Q02",
+      "Q10"
+    ],
+    "statement": "可用逐轮接口把语义提取、状态跟踪、决策采用和跨会话续存分开检查。同一句‘忘记’可能发生在任一环节，离线跟踪分数只覆盖其状态输出。",
+    "category": "INFERENCE",
+    "critical": true,
+    "confidence": "medium",
+    "counterevidence": "端到端模型内部可能不暴露模块边界，可以仍按可观测输入、输出与干预定位。",
+    "limitation": "诊断分层是研究归纳，需要实际日志与实验才能归因。",
+    "disposition": "作为带条件的资料归纳保留",
+    "evidence": [
+      {
+        "source_id": "S02",
+        "locator": "System Manager",
+        "note": "语义框架和外部后端动作是不同接口。"
+      },
+      {
+        "source_id": "S03",
+        "locator": "§§2.1–2.3、§4",
+        "note": "输入、状态分布及离线评估分列。"
+      },
+      {
+        "source_id": "S15",
+        "locator": "§§2、4",
+        "note": "另行构造多会话历史访问评测。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C04",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q02",
+      "Q03"
+    ],
+    "statement": "DSTC2 分开标注与跟踪目标约束、请求字段和搜索方式。目标可在对话中改变；请求字段表示针对当前候选实体索取的信息，搜索方式含按条件、按名称、要备选等。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "SGD 的状态另含 active intent，结构不宜按名称直接一一对应。",
+    "limitation": "此三分法是 DSTC2 标注契约。其他语料的 belief state 或请求字段范围可能不同。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S03",
+        "locator": "§2.1、§4.1、Appendix B",
+        "note": "检查三类标签及逐轮样例，目标可改变。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C05",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q03",
+      "Q06",
+      "Q07"
+    ],
+    "statement": "作者 2013 年手册的 focus 规定，对目标或方式，旧项权重为 1 减本轮该组件 SLU 证据总质量，输出为新证据加加权旧状态；请求字段可在系统告知时重置。2014 年成果论文 §3.2 的系数刊载式缺少 1−。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "在手册定义中无新证据时保留旧状态，证据量为 1 时新证据完全替代旧项；不能从 S03 刊载系数直接得到这些边界。",
+    "limitation": "这里采用作者手册给出的规则，保留成果论文印刷差异。实现压缩包未读取，本期资料不对代码内部行为另作确认。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S19",
+        "locator": "§5.1，pp. 10–11",
+        "note": "定义 q、首轮、无新证据与完全重置的边界，并说明系统告知时请求字段可重置。"
+      },
+      {
+        "source_id": "S03",
+        "locator": "§3.2，pp. 266–267",
+        "note": "刊载式显示新证据加旧状态，系数印为本轮证据和，与作者手册的书写不同。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C06",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q02",
+      "Q03",
+      "Q08"
+    ],
+    "statement": "SGD 基线对每个已给定槽先判定 none、dontcare 或 active。none 保留此前状态，dontcare 写入无偏好，active 再按槽类型选候选值或从文本定位跨度。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "保留旧值与显式取消约束的语义不同。Diable 另有显式 DELETE 操作。",
+    "limitation": "这是该基线的三种状态，不提供一个适用于所有任务的清除或例外协议。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S09",
+        "locator": "Model Architecture，Slot Status Prediction 和 Categorical/Non-categorical Slot Value",
+        "note": "三个槽状态是 none、dontcare、active；另有活跃意图的 NONE 候选。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C07",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q03",
+      "Q06",
+      "Q07",
+      "Q08"
+    ],
+    "statement": "Diable 把显式状态表示为表，对当前回合产生表操作并应用到上一轮表。论文对比差分状态操作与每轮生成完整累积状态，并在分析中记录预测状态可能传递错误。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "论文还比较全历史输入，差分输出与输入窗口长度是两条独立设计轴。",
+    "limitation": "删除、保留和无偏好仍取决于具体数据与操作定义。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S17",
+        "locator": "§3、Fig. 2、§§6.3–6.4",
+        "note": "原文表操作、上一轮输入和错误传播分析。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C08",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q02",
+      "Q04"
+    ],
+    "statement": "Williams 与 Young 的 POMDP 在观察给定动作的用户输入后，用转移概率预测、用观测似然加权并归一化，得到对潜在状态的后验信念；策略使用信念选动作。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "确定性更新仍可用于已验证的字段，语义不确定才需要用概率分布表达多个解释。",
+    "limitation": "模型须有状态、动作、观察和收益定义，后验并不保证候选状态或概率模型正确。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S04",
+        "locator": "§2.1，Eq. (2) 及随后策略定义",
+        "note": "核对转移、观察、归一化和信念到动作的映射。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C09",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q04",
+      "Q07"
+    ],
+    "statement": "S04 §2.1 的语音信箱示例只含 ask、doSave、doDelete，低置信区域选择 ask。含 confirm 的旅行订票动作属于 S04 §4 的另一组模拟实验。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "把询问代价、错误操作代价或识别噪声改掉，最优动作区域可能随之变化。",
+    "limitation": "两者为作者设定的示例及仿真。动作集合、收益、状态和观测口径分别报告。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S04",
+        "locator": "§2.1，Figs. 2–4、Table 4；§4.1 旅行任务仿真",
+        "note": "核对两个动作集合、语音信箱的收益和低置信策略，以及旅行模拟中的 confirm-to-x 和 confirm-from-x。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C10",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q04"
+    ],
+    "statement": "Williams 与 Young 将用户目标、动作和对话历史等因子用于描述信念更新，并把大状态空间的策略优化列为可扩展性问题，讨论 Summary POMDP 的压缩规划路径，在该方法中信念监控与规划压缩分开。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "适用于小任务的精确策略，或利用任务结构的近似方法，可以在不同条件下共存。",
+    "limitation": "表示压缩与求解近似依赖任务和充分性假设，不支持通用开销保证。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S04",
+        "locator": "§2.2 Eqs. (9)–(15)、§4.5 Fig. 23 附近的扩展讨论",
+        "note": "因子化及可扩展路径。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C11",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q02",
+      "Q05",
+      "Q10"
+    ],
+    "statement": "MATCH 将注册调查得到的餐厅属性权重与部分喜欢或不喜欢的值保存为持久数据库中的用户模型，推荐和比较模块使用加权效用组织响应。其用户无关的任务模型用目标属性树表示选择餐厅相关因素。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "PEGASUS 的局部候选缓存是任务工作状态；两种存储虽都可显式查询，作用域不同。",
+    "limitation": "论文使用显式问卷，未在该设计中验证从任意对话自动学习隐含偏好或一次性例外。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S05",
+        "locator": "§3.1、§§3.2–3.4、Fig. 6",
+        "note": "核对用户无关的选餐厅目标属性树、用户注册权重、偏好值、持久数据库和效用。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C12",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q05",
+      "Q08",
+      "Q10"
+    ],
+    "statement": "同一句偏好应按作用域区分任务约束、长期用户默认、当前例外与领域事实。规则负责如何合并和检查条件，持久用户模型负责归属及默认值，任务内覆盖的过期和长期写入需要各自定义。",
+    "category": "INFERENCE",
+    "critical": true,
+    "confidence": "medium",
+    "counterevidence": "画像可参与当前排序，当前显式条件也可改变结果，二者可以并存。",
+    "limitation": "该分离是接口推导。材料未报告适用于所有用户的优先级、过期时间或例外更新算法。",
+    "disposition": "作为带条件的资料归纳保留",
+    "evidence": [
+      {
+        "source_id": "S05",
+        "locator": "§§3.2–3.4",
+        "note": "持久属性权重与任务模型分别建模。"
+      },
+      {
+        "source_id": "S02",
+        "locator": "System Manager",
+        "note": "局部缓存和后端检查为任务内用途。"
+      },
+      {
+        "source_id": "S09",
+        "locator": "Dataset，schema 与 per-turn state",
+        "note": "系统描述和用户当轮目标分别存在。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C13",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q06"
+    ],
+    "statement": "LSTM 有可定位的 1995 年 FKI-207-95 技术报告；本期资料采用 1997 年期刊文本，其中单元使用内部自循环、输入门和输出门，并在训练中为长时滞误差信号提供路径。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "可把神经网络内部状态用于预测，再输出外部可检查的状态。",
+    "limitation": "LSTM 文中长依赖实验不是 DST、持久化、隐私删除或跨用户记忆实验。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S06",
+        "locator": "§§3.2、4.1–4.2、Fig. 1",
+        "note": "机制定位采用 1997 年期刊版。早期日期参见原文索引中的 1995 年技术报告。"
+      },
+      {
+        "source_id": "S18",
+        "locator": "封面、署名页",
+        "note": "FKI-207-95，署 1995-08-21。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C14",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q06",
+      "Q10"
+    ],
+    "statement": "Gers 等的后续 LSTM 工作加入遗忘门，在连续输入中学习重置或衰减单元内部状态。这里的遗忘对象是数值单元，实验目标是连续序列预测。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "跨会话读写可以使用显式持久状态，仍可由神经网络参与推断。",
+    "limitation": "不应以内部数值门控证明某项用户偏好已从持久存储删除。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S07",
+        "locator": "Abstract、§§1–2、Fig. 1",
+        "note": "引入可学习的遗忘门及连续输入场景。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C15",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q01",
+      "Q03",
+      "Q06"
+    ],
+    "statement": "Henderson 等的词级 RNN 跟踪器同时使用先前显式概率与内部记忆向量。标记和未标记特征共同形成下一轮槽值分布，内部向量另行递推。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "使用词或 ASR 特征不必取消显式状态接口，标记值也有候选可识别的前提。",
+    "limitation": "论文的外部状态依指定槽和候选结构。可检查分布并不等价于可直接解释隐向量或跨会话保存它。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S08",
+        "locator": "§§3.1–3.4，belief softmax 与 memory logistic 更新式，§4.2",
+        "note": "旧概率和隐向量都是续算输入，显式分布与数值状态并存。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C16",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q02",
+      "Q07",
+      "Q10"
+    ],
+    "statement": "DSTC2 在共同的餐馆领域记录上重放跟踪器，按联合目标、方式和请求字段比较状态输出。训练与测试使用不同对话管理条件来检验一定的迁移，未在此协议中比较产品的完成交易率。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "作者说明在线部署的策略会改变后续对话，所以固定日志结果不能代替在线任务效果。",
+    "limitation": "同一测试日志并未统一每个跟踪器的输入通道、模型集成和部署成本。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S03",
+        "locator": "§§2.2–2.3、§4、Appendix A",
+        "note": "训练/测试条件、共同测试对话与离线指标。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C17",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q06",
+      "Q07"
+    ],
+    "statement": "DSTC2 测试中，S08 Table 2 的 h-ASR 联合目标准确率为 0.768、L2 为 0.346，h-SLU 为 0.742、0.387。S03 Appendix A 的 focus（team0.entry1）为 0.719、0.464。输入与集成方式有差异。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "S03 Table 4 另报告不同集成方案及其统计比较，不应把选定提交当全体排名或套用该表的显著性结论。",
+    "limitation": "S08 Table 2 与 S03 Appendix A 没有这几组的成对显著性；不能从这些提交隔离 ASR 输入、去掉 SLU、模型集成或运行成本的作用。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S08",
+        "locator": "§5、Table 2",
+        "note": "核对 h-ASR 和 h-SLU 两个 RNN 条目及各自输入和集成。"
+      },
+      {
+        "source_id": "S03",
+        "locator": "§§3.2、4、Appendix A team0.entry1",
+        "note": "确认 focus 的标识及精确数值，另核对准确率与 L2 评估。"
+      }
+    ],
+    "experiment": {
+      "dataset": "DSTC2 餐馆域测试集",
+      "task": "离线跟踪联合目标",
+      "model": "词级 h-ASR 与 h-SLU RNN 提交，各集成 12 个跟踪器",
+      "budget": "Table 2 没有同预算推理时延",
+      "baseline": "focus 规则基线",
+      "metric": "联合目标准确率及 L2",
+      "result": "h-ASR 0.768/0.346，h-SLU 0.742/0.387，focus 0.719/0.464",
+      "significance": "S08 Table 2 与 S03 Appendix A 未报告这些条目的成对显著性。S03 Table 4 的检验对象是另列的集成对照。",
+      "conditions": "h-ASR 接受 N-best ASR，h-SLU 接受 SLU；不比较交易成功。"
+    }
+  },
+  {
+    "claim_id": "C18",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q03",
+      "Q07"
+    ],
+    "statement": "Diable 的论文在 MultiWOZ 对照中报告用状态操作提高推理时间效率。在都使用完整对话作为上下文的行中，lightCumulative 与 Diable 的单样本中位时间分别为 33.65 与 19.41 毫秒。论文讨论差分输出的影响，并在 §6.4 对比预测前状态与金标前状态以定位误差传递。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "S17 Table 3 的 JGA 随版本、上下文和模型变化，效率优势不是每个设置的准确率优势。",
+    "limitation": "中位推理时间依比较模型、上下文和实验环境，不能推断所有显式状态系统普遍更快。金标前状态是诊断条件。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S17",
+        "locator": "§5.3 Table 2、§6.4 Table 5",
+        "note": "确认计时口径与金标前状态诊断。"
+      }
+    ],
+    "experiment": {
+      "dataset": "论文的 MultiWOZ 实验",
+      "task": "状态操作与累积状态的速度比较、前状态诊断",
+      "model": "Diable 与论文实现的 lightCumulative",
+      "budget": "推理时间由 Table 2 计量，模型和上下文见该表",
+      "baseline": "lightCumulative；预测或金标前状态用于独立诊断",
+      "metric": "推理时间中位数；Table 5 为 JGA",
+      "result": "完整对话上下文的 lightCumulative 33.65 ms，Diable 19.41 ms；40.83 ms 的标准 Cumulative 是表中相对倍数基线；Table 5 单列前状态诊断",
+      "significance": "该时延对比未将显著性作为结论",
+      "conditions": "使用作者实现和实验设置，不能把表操作与有无完整输入历史混作同一变量。"
+    }
+  },
+  {
+    "claim_id": "C19",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q03",
+      "Q06",
+      "Q08"
+    ],
+    "statement": "TRADE 共享话语编码器、槽门和状态生成器，按指定域与槽生成值；复制机制可以从对话中取出训练时未见过的槽值。槽门区分预测值与 none、dontcare。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "新值不总需要扩充封闭值表，真正新增字段或动作还需要相应接口。",
+    "limitation": "复制需要文本中有可识别的值，或由生成器学习归一化；给定域、槽嵌入与输出结构仍有前提。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S10",
+        "locator": "§3、Fig. 2",
+        "note": "区分给定槽条件与复制生成的开放值。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C20",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q07",
+      "Q08"
+    ],
+    "statement": "TRADE 报告 MultiWOZ 五域联合目标准确率 48.62%、槽准确率 96.92%；留出 taxi 域训练时其联合目标准确率为 60.58%，该域全量训练参照为 76.13%。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "S10 Table 4 留出 hotel 仅 13.70% JGA、train 仅 22.37%，对应单域全量训练参照 55.52% 和 77.71%。",
+    "limitation": "总体五域与单域零样本任务的分母不同。留出一个域的结果不能推广到所有新域、所有新槽或新业务动作。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S10",
+        "locator": "§4、Table 2、§5.1 Table 4",
+        "note": "核对多域联合指标、留出 taxi 域和全量训练参照。"
+      }
+    ],
+    "experiment": {
+      "dataset": "论文的 MultiWOZ 五域设置",
+      "task": "联合目标跟踪与留一域训练测试",
+      "model": "TRADE 词生成和复制",
+      "budget": "原表没有与其他时代模型等推理预算的报告",
+      "baseline": "Table 2 的共享和非共享比较；Table 4 同域全量训练",
+      "metric": "联合目标准确率与槽准确率",
+      "result": "五域 48.62%/96.92%；taxi 留出 60.58%，全量参照 76.13%",
+      "significance": "Tables 2、4 未给这组数值的成对显著性",
+      "conditions": "五域总体结果与 taxi 单域结果分开引用。"
+    }
+  },
+  {
+    "claim_id": "C21",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q01",
+      "Q08",
+      "Q09"
+    ],
+    "statement": "Schema-Guided Dialogue 按服务提供意图、槽位和自然语言说明。跟踪器在当前服务给定的候选上推断，非类别槽可以从文本取值，实验将服务是否出现在训练中作为迁移条件。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "描述驱动的同一个显式模型可以复用到部分新服务，反驳固定服务必然要求重新训练同一套跟踪器的强说法。",
+    "limitation": "跨服务迁移依靠接口说明及对应数据分布。新动作的执行映射、未声明概念与隐含用户偏好仍需单独证据。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S09",
+        "locator": "Dataset、The Schema-Guided Approach、Model Architecture、Tables 4–5",
+        "note": "已知接口以描述提供；未见服务评估不等于开放发现字段。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C22",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q07",
+      "Q08",
+      "Q11"
+    ],
+    "statement": "MultiWOZ 2.4 作者修订了 2.1 验证集和测试集的状态标签，训练集沿用 2.1。论文对照显示评分会随测试标注改变，且作者报告仍可能有剩余错误。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "缺陷有不一致与归一化等多类，标签修订不等于所有预测偏差都来自金标。",
+    "limitation": "标注修订可能影响评估与选模，同分数变化不能单独归因于架构改进。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S11",
+        "locator": "§3、§4、Table 4、Limitations",
+        "note": "确认变更集中在验证和测试标签，比较需注明版本。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C23",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q02",
+      "Q07",
+      "Q11"
+    ],
+    "statement": "MultiWOZ 2.4 论文 Table 8 的订位时间回合把 2.1 的 21:45 更正为 09:45。该表中 STAR 输出 09:45，SOM-DST 输出 10:45。",
+    "category": "FACT",
+    "critical": false,
+    "confidence": "high",
+    "counterevidence": "同一表明确指出并非每个模型在该样例都与修订后的标签一致。",
+    "limitation": "这是一条论文中的节选，不能推断系统决策、交易结果或发生率。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S11",
+        "locator": "Table 8，最后一个 restaurant-book time 样例",
+        "note": "相同话轮可同时观察金标错误与模型预测错误，研究者不替换为自造例子。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C24",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q08",
+      "Q09"
+    ],
+    "statement": "IC-DST 将跟踪改写成 SQL 形式的状态更新，向预训练模型提供任务和表结构，少样本设置检索已标注示例，推理时不更新模型参数。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "与纯固定槽值分类不同，输入结构可修改，论文还给出零样本设定。",
+    "limitation": "表结构依然由研究协议提供。此设定处理状态提取和更新，不能证明模型自行定义新的状态结构或决定跨会话持久化。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S12",
+        "locator": "§3.1–3.3、Fig. 2",
+        "note": "核对结构化提示、示例选择与直接解码。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C25",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q07",
+      "Q09"
+    ],
+    "statement": "IC-DST 论文 Table 1 的 Codex-davinci 在 1% 训练示例池设置下，MultiWOZ 2.1/2.4 的联合目标准确率为 43.13/48.35。论文的 Codex 和 GPT-Neo 每次提示示例预算不同。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "同表的 100% 示例池结果不同，且作者并未将该任务当作 Schema 诱导。",
+    "limitation": "训练示例池比例不是每次提示的示例条数。版本、底座和预算不同的结果不能作净因果比较。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S12",
+        "locator": "§4.2、Table 1 及紧随的实验配置",
+        "note": "核对 1% 训练示例池、两个数据版本和提示示例设置。"
+      }
+    ],
+    "experiment": {
+      "dataset": "MultiWOZ 2.1 与 2.4",
+      "task": "给定 Schema 的少样本 DST",
+      "model": "IC-DST Codex-davinci；另列 GPT-Neo",
+      "budget": "Codex 提示 10 个示例，GPT-Neo 5 个，1% 是示例池比例",
+      "baseline": "论文表中已有少样本方法与不同预训练模型",
+      "metric": "JGA",
+      "result": "Codex-davinci 43.13/48.35",
+      "significance": "Table 1 未给该配对的显著性",
+      "conditions": "两个标签版本分列，不能把差值当模型改进。"
+    }
+  },
+  {
+    "claim_id": "C26",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q08",
+      "Q09"
+    ],
+    "statement": "GenDSI 从对话生成槽名与槽值候选，再聚类成候选 Schema，使用人工参考槽及值匹配评估。它的输出是归纳出的槽类型和候选值。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "同表允许多个聚类匹配一个金标槽，故需连同槽数量解释 F1。",
+    "limitation": "匹配分数受聚类粒度与映射规则影响，且不直接评价执行器和跨会话收益。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S13",
+        "locator": "§§3–4、Fig. 1、Table 2",
+        "note": "核对生成、聚类及对参考槽和候选值的评价。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C27",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q08",
+      "Q09"
+    ],
+    "statement": "GenDSI 在 MultiWOZ 2.1 验证集的 Table 2 报告槽 F1 90.9、值 F1 70.5、诱导槽数 180，对照参考槽数 31。独立的状态推断 Table 1 在 D0T 测试上报告 T5-SGD 完整性 32.3%、正确性 72.6%，T5-D0T 为 95.7%、81.2%。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "Table 2 的 USI 在 MultiWOZ 槽 F1 更高而值 F1 更低；可见结论依指标。",
+    "limitation": "D0T 的完整性和正确性是状态生成器人工评价，不能与聚类槽 F1 互换。T5-D0T 在 D0T 数据的非测试领域训练，不能当作同一跨数据集迁移条件。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S13",
+        "locator": "§3 Table 1、§4 Table 2",
+        "note": "区分槽位聚类和状态推断两个实验。核对不同训练数据的 T5 变体及人工评估显著性标记。 Table 2 的主 GenDSI 行使用剔除与 MultiWOZ 和 SGD 旅行相关领域重叠的 34 个领域后剩余的 D0T 对话训练。"
+      }
+    ],
+    "experiment": {
+      "dataset": "MultiWOZ 2.1 验证集；状态推断对照从 D0T 与 SGD 各取 60 条未见领域话轮，各来自不同对话",
+      "task": "Schema 归纳；另列域外状态推断",
+      "model": "GenDSI；独立 D0T 测试比较 T5-SGD 与 T5-D0T（均由 T5-3B 初始化）",
+      "budget": "原文方法与附录记录配置；未提供与其他论文统一的推理预算",
+      "baseline": "Table 2 DSI/USI 与变体；Table 1 另对照 GPT-D0T",
+      "metric": "槽/值 F1 和诱导槽数；D0T 完整性与正确性",
+      "result": "Table 2：90.9/70.5、180 对参考 31；Table 1 的 D0T 列：T5-SGD 32.3/72.6，T5-D0T 95.7/81.2；Table 1 GPT-D0T 在 D0T 的完整性/正确性 93.3/82.0",
+      "significance": "Table 1 用 Agresti–Caffo 检验并以星号标记同列对照（p < 0.05）。Table 2 未给这组结果的成对显著性。",
+      "conditions": "S13 Table 1 在两测试集各取 60 个未见域话轮，T5-D0T 在 D0T 非测试域训练。星号或匕首号按表注对应的列内检验。 Table 2 的主 GenDSI 行使用剔除与 MultiWOZ 和 SGD 旅行相关领域重叠的 34 个领域后剩余的 D0T 对话训练。"
+    }
+  },
+  {
+    "claim_id": "C28",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q08",
+      "Q09"
+    ],
+    "statement": "Finch 等 2026 年把槽位归纳做成流式 Schema 更新，并引入模拟对话与经人工指导和纠正的新评估数据。方法先诱导候选槽并修订归并，评估中可用最终 Schema 回放早期对话状态。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "允许用最终 Schema 表达早期对话有利于与聚类方法比较，但不等于线上第一遍时已经具备它。",
+    "limitation": "合成数据和回放能评估任务 Schema，不能代替在线真实业务流程、用户偏好生命周期或长期行动收益。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S14",
+        "locator": "§3、§5.1、§6.1",
+        "note": "流式发现与修订、模拟数据及两遍评估。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C29",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q08",
+      "Q09"
+    ],
+    "statement": "Finch 等 2026 年 Table 2 的数据集名提示对照中，GPT-4o 在未提供对话时复述 MultiWOZ 槽的 F1 为 100.0，SGD 为 63.0。作者用此识别公开基准中已有知识影响诱导评价的风险。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "不同底座和数据集得分不一致，不能把结果外推给所有模型或所有基准。",
+    "limitation": "该对照能证明这组模型、提示和匹配下仅靠数据集名就可得到不少槽；不能追溯模型训练集中出现了哪一份文档。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S14",
+        "locator": "§5.1、Table 2",
+        "note": "数据集名提示、人工评估及两列结果。"
+      }
+    ],
+    "experiment": {
+      "dataset": "MultiWOZ 与 SGD 的已知 Schema",
+      "task": "给数据集名、不提供对话，评价槽复述",
+      "model": "GPT-4o，表中还有 Claude 与 Llama",
+      "budget": "输入无对话，其他模型内部训练预算不可见",
+      "baseline": "同一表的不同模型与数据集",
+      "metric": "槽级 P/R/F1",
+      "result": "GPT-4o MultiWOZ 100.0 F1，SGD 63.0 F1",
+      "significance": "Table 2 未给此配对的显著性",
+      "conditions": "作者手工提示并评估，分数取决于其匹配口径。"
+    }
+  },
+  {
+    "claim_id": "C30",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q05",
+      "Q09",
+      "Q10"
+    ],
+    "statement": "Multi-Session Chat 将多次开放域会话和可跨期使用的历史分别组织。作者比较无旧历史、原对话、人工摘要及预测摘要等输入，其中预测摘要模型可以为当前话轮预测总结或无总结。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "提供人工摘要、模型摘要和原始历史都是可操作的跨会话输入，复杂度与真实性取舍不同。",
+    "limitation": "评价围绕开放域回应，与有外部数据库约束的任务成功不同。可跨会话使用历史也不保证对任意用户偏好的正确生命周期管理。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S15",
+        "locator": "§§2–4、Fig. 1、Tables 3–4",
+        "note": "实际任务构造和预测摘要入口。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C31",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q07",
+      "Q09",
+      "Q10"
+    ],
+    "statement": "Multi-Session Chat 的 Table 4 中，第 2 会话开场的验证困惑度，无历史为 9.96，原对话历史为 7.55，金标摘要为 6.98，预测摘要为 7.44。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "结果随会话和历史类型而变。预测摘要不等同金标，人工摘要本身不是无监督自动选择。",
+    "limitation": "这些值是验证困惑度，回答生成对历史更可预测并不自动等于决策正确、交易成功或适当写入。 预测摘要由使用人工标注训练的模型产生，该行还受无总结标签采样条件约束。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S15",
+        "locator": "§4、Table 4 及表注",
+        "note": "第 2 会话开场列与 BST 2.7B-1024 配置。"
+      }
+    ],
+    "experiment": {
+      "dataset": "Multi-Session Chat 验证集",
+      "task": "第 2 会话开场回复预测",
+      "model": "BST 2.7B-1024，经 MSC 微调",
+      "budget": "1024 截断设定；不同历史形态见表",
+      "baseline": "无历史、原对话、金标摘要、预测摘要",
+      "metric": "validation perplexity",
+      "result": "9.96、7.55、6.98、7.44，按前述顺序",
+      "significance": "该表未报告此四列比较的显著性",
+      "conditions": "仅取 Table 4 第 2 会话开场列。预测摘要对应 §4/Table 5 的无总结标签 K=5% 子采样配置。"
+    }
+  },
+  {
+    "claim_id": "C32",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q05",
+      "Q09",
+      "Q10"
+    ],
+    "statement": "Memory-R1 用一个管理代理在外部文本记忆上选择 ADD、UPDATE、DELETE 或 NOOP，用另一个代理处理检索候选并回答。管理策略以随后问答正确性获得奖励，训练时使用既定操作集合与构造数据。",
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "与固定保留全部历史相比，这类工作真正评价了可训练的记忆操作，但指标仍是后续问答。",
+    "limitation": "能学习写入或删除动作不等于能自行设计接口、访问策略或掌握用户授权。 论文 Appendix B.2 文字写用前 24 回合建立记忆快照，同附录 Algorithm 1 写前 50 回合，原文口径不一致。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S16",
+        "locator": "§3.1–3.2、Appendix B.2、Figs. 9–10",
+        "note": "明确训练动作、问答反馈、外部存储；B.2 文字和 Algorithm 1 的记忆快照窗口数字不同。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C33",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q07",
+      "Q09",
+      "Q10"
+    ],
+    "statement": "Memory-R1 正式版 Table 1 在 LoCoMo 的 Qwen-2.5-7B-Instruct 配置中，Memory-SFT 的总体 F1 和 Judge 分为 39.51/61.13，GRPO 为 43.14/61.51，PPO 为 41.72/59.53。论文排除对抗题并单列不同跨基准设定。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "counterevidence": "PPO 的 Judge 值低于 Memory-SFT，即使其 F1 更高。LongMemEval 使用 oracle 版本，不能声称全文历史检索已验证。 S16 的 MSC 为按 MemGPT 改造的问答设置，应与 S15 的原始开场语言预测分开。",
+    "limitation": "总体结果依数据划分、Judge 和底座，不证明任意样本的实际任务行为。完整系统差异还含回答代理。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S16",
+        "locator": "§4.1、Table 1、§§4.3–4.4、Appendix B",
+        "note": "核对同底座表值、训练分割、消融与 LongMemEval oracle。"
+      }
+    ],
+    "experiment": {
+      "dataset": "LoCoMo，排除对抗子集，论文报告 152/81/1307 train/validation/test 问题",
+      "task": "跨会话文本问答",
+      "model": "Qwen-2.5-7B-Instruct 的 SFT、GRPO 和 PPO",
+      "budget": "基线重实现说明温度 0、最大 token 上限 2048；未统一成本账单",
+      "baseline": "Memory-SFT 与同底座其他方法",
+      "metric": "总体 F1 和 LLM-as-a-Judge",
+      "result": "SFT 39.51/61.13，GRPO 43.14/61.51，PPO 41.72/59.53",
+      "significance": "Table 1 未给这三个总体结果的成对显著性",
+      "conditions": "同一篇论文的选定行，不能与其他 LoCoMo 版本的数字直接并表。"
+    }
+  },
+  {
+    "claim_id": "C34",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q02",
+      "Q06",
+      "Q10"
+    ],
+    "statement": "任务内状态、模型隐向量、当轮上下文、跨会话记忆及外部领域知识应分别记录归属、读取路径、更新和重置条件。证据要跨越到后续真实决策时，需要另设可观察结果和对照。",
+    "category": "INFERENCE",
+    "critical": true,
+    "confidence": "medium",
+    "counterevidence": "MSC 和 Memory-R1 已经提供跨会话文本任务的实证，不能把领域中的所有跨会话能力视为尚未研究。",
+    "limitation": "此处只界定观察和测量需求。已核验材料没有给出可泛化到开放任务、可变目标和有副作用执行的统一选择策略。",
+    "disposition": "作为带条件的资料归纳保留",
+    "evidence": [
+      {
+        "source_id": "S02",
+        "locator": "System Manager",
+        "note": "外部后端与临时结果分离。"
+      },
+      {
+        "source_id": "S08",
+        "locator": "§3.3",
+        "note": "显式概率和内部向量分开。"
+      },
+      {
+        "source_id": "S15",
+        "locator": "§4",
+        "note": "旧会话材料作为后续文本生成输入。"
+      },
+      {
+        "source_id": "S16",
+        "locator": "§§3–4",
+        "note": "跨会话写入操作以问答反馈评价。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C35",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q03",
+      "Q11"
+    ],
+    "statement": "DSTC2 Appendix B 的原始样例并列显示系统话轮、用户话轮、SLU 候选、状态标注和示例跟踪输出；样例内目标区域从 north 改为 south，并另有请求字段。",
+    "category": "FACT",
+    "critical": false,
+    "confidence": "high",
+    "counterevidence": "有逐轮观测和标签能分离几类错误线索，但不能据此统计真实系统的故障比例。",
+    "limitation": "跟踪器输出是论文展示的示例；摘录未提供单独替换策略后同一真实用户的反事实结果。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S03",
+        "locator": "Appendix B，Sample dialog, labels, and tracker output",
+        "note": "对照列定义、区域变更与请求字段。"
+      }
+    ]
+  },
+  {
+    "claim_id": "C36",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q07"
+    ],
+    "statement": "Henderson 等在独立的实现说明中报告，未优化的 Python 跟踪器在每个状态组件包含一个 RNN 时，在 3.2 GHz Intel Core i7-970 上约处理 50 个回合每秒。",
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": false,
+    "confidence": "high",
+    "counterevidence": "可以测到某个显式/混合跟踪器的运行开销，但原文此处没有同条件 focus 的计时。",
+    "limitation": "该吞吐量不属于 Table 2 的 12 模型集成准确率比较，也不是完整语音系统端到端延迟。",
+    "disposition": "保留于对应问题，按原文条件引用",
+    "evidence": [
+      {
+        "source_id": "S08",
+        "locator": "§4.3，Table 2 之前的实现说明",
+        "note": "吞吐量测量及硬件和模型配置。"
+      }
+    ],
+    "experiment": {
+      "dataset": "作者跟踪器实现，计时使用的具体样本集未在此段列明",
+      "task": "跟踪处理吞吐量",
+      "model": "每状态组件一个 RNN，未优化 Python",
+      "budget": "3.2 GHz Intel Core i7-970",
+      "baseline": "此处未提供计时基线",
+      "metric": "回合每秒",
+      "result": "约 50",
+      "significance": "未报告误差区间或显著性",
+      "conditions": "与 Table 2 的集成盲测分开解释。"
+    }
+  },
+  {
+    "claim_id": "C37",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q01",
+      "Q07",
+      "Q11"
+    ],
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "statement": "PEGASUS 的初步真实订票记录来自研究组 8 名成员的 10 次往返需求，7 次成功。Table 1 对成功订票列出平均 24.5 次查询、814 秒，正文说明成功者有 6 人。",
+    "evidence": [
+      {
+        "source_id": "S02",
+        "locator": "Evaluation、Table 1",
+        "note": "实际任务、人数、完成次数与成功用户用时口径。"
+      }
+    ],
+    "limitation": "便利样本、先前经验和任务复杂度各异，未给随机对照。耗时与查询量只对应成功参与者。",
+    "counterevidence": "失败日志和经验用户与首次使用者的差异同时见原文。不能将部署片段与离线 DST 得分直接比较。",
+    "disposition": "作为早期实际任务指标，保留样本与耗时限制。",
+    "experiment": {
+      "dataset": "作者记录的 10 次真实往返订票，由研究组 8 人发起",
+      "task": "用 PEGASUS 和 SABRE 完成实际订票",
+      "model": "1994 年论文描述的 PEGASUS 系统",
+      "budget": "按原文记录查询数和墙钟时间，未提供统一推理预算",
+      "baseline": "无随机对照；成功者中有经验与首次使用者为描述性比较",
+      "metric": "成功订票次数、查询数和完成时间",
+      "result": "7/10 完成；Table 1 全体成功样本均值 24.5 次查询、814 秒，正文记 6 位成功参与者。",
+      "significance": "原文未为这组初步任务样本报告显著性检验",
+      "conditions": "表只列 7 次成功的订票，不能作为 10 次全部任务的完成时间均值。"
+    }
+  },
+  {
+    "claim_id": "C38",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q02",
+      "Q03",
+      "Q05",
+      "Q07",
+      "Q11"
+    ],
+    "category": "FACT",
+    "critical": true,
+    "confidence": "high",
+    "statement": "PEGASUS 作者的失败日志报告，用户遇到错误的返程后清除了对话历史，但未明确撤销 SABRE 预订，随后出现去程重复订票且后端无法协调。原文的 scratch-that 规则在涉及预订时要求向后端发送取消请求。",
+    "evidence": [
+      {
+        "source_id": "S02",
+        "locator": "Dialogue Management、Evaluation 失败案例一",
+        "note": "区分局部历史清空与业务撤销的动作、过程及观察后果。"
+      }
+    ],
+    "limitation": "作者解释来自单条现场日志。已读材料没有同一情形的受控策略重放或完整可执行日志。",
+    "counterevidence": "原文在成功案例和另外两个失败案例中呈现其他路径，单一重复预订案例不能代表总体故障构成。",
+    "disposition": "作为可查的状态/业务动作分离实例保存。"
+  },
+  {
+    "claim_id": "C39",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q07",
+      "Q08",
+      "Q09"
+    ],
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "statement": "SGD v2 的 Fig. 7 对照显示见过服务在目标指标上一般好于未见服务。Table 5 中未见 RentalCars、Buses 的 Joint GA 分别为 0.086 和 0.097，见过的 Weather 为 0.620。",
+    "evidence": [
+      {
+        "source_id": "S09",
+        "locator": "Results，Fig. 7、Table 5",
+        "note": "核对服务是否见过、按域的 Joint GA 和作者给出的 OOV 解释。"
+      }
+    ],
+    "limitation": "跨域难度、值的分布和 Schema 均可能不同；按域差异不能隔离见过服务的单独因果效应。",
+    "counterevidence": "见过的 RideSharing 也只有 0.170 Joint GA。作者讨论槽值词汇外比例和候选规模，未在表中把两者隔离。",
+    "disposition": "保留服务迁移实证及域内外反例。",
+    "experiment": {
+      "dataset": "Schema-Guided Dialogue 测试集",
+      "task": "给定服务 Schema 的目标跟踪",
+      "model": "SGD 论文的 Schema-Guided 基线",
+      "budget": "本表未列各域同预算计时",
+      "baseline": "Fig. 7 的见过与未见服务，Table 5 各域",
+      "metric": "Joint Goal Accuracy；原图还报告 Avg GA",
+      "result": "RentalCars 0.086、Buses 0.097、Weather 0.620、RideSharing 0.170",
+      "significance": "原文未为此四域的对照报告成对显著性",
+      "conditions": "星号为该域测试服务未见，服务和域难度没有随机化。"
+    }
+  },
+  {
+    "claim_id": "C40",
+    "episode_id": "EP01",
+    "question_ids": [
+      "Q08",
+      "Q09"
+    ],
+    "category": "EXPERIMENTAL_FINDING",
+    "critical": true,
+    "confidence": "high",
+    "statement": "S14 Table 6 的 DOTS 测试中，取同为 Ll-8B、FINAL 表示的行，Embed 的槽/值 F1 为 46.2/74.8，Revision 为 57.8/68.2，Slot Conf 为 66.8/74.9。",
+    "evidence": [
+      {
+        "source_id": "S14",
+        "locator": "§5.2、Table 5、§6 总述与 §§6.1–6.3、Table 6",
+        "note": "同底座和 FINAL 条件。§5.2 采用大小写无关的精确值匹配，相似阈值为 0.5，冗余槽预测计入精确率错误。 各指标对 10 个测试场景分别评估后取均值，并对 3 次重复取均值。"
+      }
+    ],
+    "limitation": "FINAL 是论文的状态表示条件；评测使用人修订的 DOTS 测试与其匹配口径，不能直接量化真实业务执行或纵向记忆收益。",
+    "counterevidence": "Revision 在此对照中槽 F1 高于 Embed，值 F1 反而更低；不同维度的排名不同。",
+    "disposition": "作为流式 Schema 诱导同条件比较保留。",
+    "experiment": {
+      "dataset": "DOTS 测试集，取训练数据标记 DOTS 的行",
+      "task": "槽位 Schema 归纳及值发现",
+      "model": "Ll-8B，Embed、Revision 与 Slot Conf",
+      "budget": "统一到同底座与 FINAL 表示，表中未列同成本计时",
+      "baseline": "Embed；对照 Revision 与 Slot Conf",
+      "metric": "平均槽 F1 和值 F1",
+      "result": "46.2/74.8、57.8/68.2、66.8/74.9，顺序如上",
+      "significance": "Table 6 未给这组行的成对显著性",
+      "conditions": "F 为 FINAL，且统一 DOTS 测试、训练数据标记和底座。 §5.2 采用大小写无关的精确值匹配，相似阈值为 0.5，冗余槽预测计入精确率错误。 各指标对 10 个测试场景分别评估后取均值，并对 3 次重复取均值。"
+    }
+  }
+]

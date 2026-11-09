@@ -1,0 +1,627 @@
+{
+  "version": "008d813ef5941de9",
+  "run_id": "0624eb19a2ab020559be1cfe",
+  "state": "ACCEPTED",
+  "parameters": {
+    "outline_path": "reference/01_Agent_Memory_内容主线.md",
+    "outline_sha256": "d665a62285c9049797c1dd6593c998ebdb149914f9db936d70c8678238e2a33d",
+    "episode": "EP01",
+    "as_of_date": "2026-11-09",
+    "depth": "deep",
+    "max_revisions": 2,
+    "review_profile": "standard-v2",
+    "writer_id": "ep01-research-writer",
+    "skill_version": "0.2.0",
+    "skill_sha256": "1cd2fa198dea2de3c7b2aa3c9f3828cb4f404173ffdff402b57852fd940c8ff8",
+    "execution_policy": "single",
+    "force_refresh_sources": true,
+    "refresh_id": "dstc2-handbook-terminal"
+  },
+  "accepted_at": "2026-11-09T10:34:52.674186+00:00",
+  "source_count": 19,
+  "claim_count": 40,
+  "audits": [
+    {
+      "episode": "EP01",
+      "reviewer_id": "ep01-independent-materials-a",
+      "review_session": "ep01-materials-refresh-11-b7e6d9a2",
+      "review_method": "independent_agent",
+      "verdict": "pass",
+      "reviewed_sha256": {
+        "scope_contract.json": "5bfc94c498741a62036225d45a23bd98f667039bee812853dbb0cd9ccfa91224",
+        "sources.json": "3a332e0fc9ae4491f173e530b06a0fd0d2ca75e8389aa63a34b29ca8df3dcb51",
+        "evidence_ledger.json": "ba2a4f3f834f80d9195d0e853bdbccc5ac21031e3589bbf5584d90fbe65fc6cc",
+        "evidence_matrix.md": "9d8045ba36f67000b1140f81bafe07350958477155ded08464d4837b9fa141e1",
+        "technical_notes.md": "3f012ae30706e408bde3ceed462650ab9cc6a5e62e22285072e6b915d39f4676",
+        "concepts.json": "b5deb14b01e6e27c2442246be546a110be167ca0e4850cbac803e1cb95f50c9c",
+        "research.md": "723b019bc51df4b5169e9d21eeab907e10597a224da007a24853087a35027fd6",
+        "episode_brief.md": "e43f16e983b342cf3caf094d3d4964c1221d63504e14c81140894ab665e44abd",
+        "research_plan.md": "540b3d0728663fbe76c19ce302ae8841dfac765043d9f65a80b1c4efa97ba6e2",
+        "research_questions.json": "e0f8a503efeeb050384d1f31210a4881c697a461afb8894e307d08952e8d5692",
+        "references.md": "9bd3542e529b36411c7fac6456e39475a346fdd9665b4f5e5a5d62502d1cdfe4",
+        "retrieval_log.md": "9cc575203da4abcb46c91e5d7e5eb5a2ae9c1e4440269bcb7c66349453f5d893",
+        "coverage.json": "087daf6c834912ce3c7d2f86c756bc1a3756e3e761fab11b8581968860e1c7a6"
+      },
+      "verified_claims": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07",
+        "C08",
+        "C09",
+        "C10",
+        "C11",
+        "C12",
+        "C13",
+        "C14",
+        "C15",
+        "C16",
+        "C17",
+        "C18",
+        "C19",
+        "C20",
+        "C21",
+        "C22",
+        "C23",
+        "C24",
+        "C25",
+        "C26",
+        "C27",
+        "C28",
+        "C29",
+        "C30",
+        "C31",
+        "C32",
+        "C33",
+        "C34",
+        "C35",
+        "C36",
+        "C37",
+        "C38",
+        "C39",
+        "C40"
+      ],
+      "reviewed_questions": [
+        "Q01",
+        "Q02",
+        "Q03",
+        "Q04",
+        "Q05",
+        "Q06",
+        "Q07",
+        "Q08",
+        "Q09",
+        "Q10",
+        "Q11"
+      ],
+      "hard_gates": {
+        "sources": true,
+        "mechanisms": true,
+        "traceability": true,
+        "chronology": true,
+        "failure_modes": true,
+        "comparison": true,
+        "scope": true,
+        "cross_episode": true,
+        "coverage": true,
+        "conditions": true
+      },
+      "scores": {
+        "facts": 29,
+        "coverage": 29,
+        "mechanisms": 15,
+        "conditions": 15,
+        "traceability": 10
+      },
+      "issues": [
+        {
+          "issue_id": "I01",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q07、C17、C05、证据矩阵、检索日志",
+          "evidence": "S08 Table 2 只有 RNN 行；S03 §3.2 识别 focus，Appendix A team0.entry1 给 0.719/0.464；S03 Table 4 为集成结果。",
+          "fix": "按表逐行归源，保留非等输入和成对显著性边界。",
+          "verification": "重开 S08 §5、Table 2 和 S03 §3.2、Appendix A，三组数值、输入、集成与显著性区分均通过。"
+        },
+        {
+          "issue_id": "I02",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q03、C06、技术笔记和证据矩阵",
+          "evidence": "S09 Slot Status Prediction Eq. (6) 周围列出 none、dontcare、active，现稿写 inactive。",
+          "fix": "采用原文标签并解释与活跃意图无结果和 Diable 无操作的区别。",
+          "verification": "重开 S09 v2 Eq. (6) 相邻段落。Q03、C06 和技术笔记均使用 none、dontcare、active，另分活跃意图 NONE。"
+        },
+        {
+          "issue_id": "I03",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q03、C05、技术笔记 §2",
+          "evidence": "S03 §3.2 刊载 q_t 为 SLU 质量之和，稿件写余量。作者脚本压缩包本次不可读。",
+          "fix": "核对可读作者实现，或将余量标记为归一化复原并注明印刷式与实现缺口。",
+          "verification": "复查 S19 固定 PDF 的 Git blob 与 §5.1–5.2。手册直接给出旧项权重、初值、零/满证据边界、请求字段重置与运行入口；S03 §3.2 仍保留不同刊载式，代码实施口径未被推断。"
+        },
+        {
+          "issue_id": "I04",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q08、Q09、C27、证据矩阵",
+          "evidence": "S13 Table 1 的 32.3/72.6 为 T5-SGD 对 D0T；另有 T5-D0T 和 GPT-D0T；原表有 Agresti–Caffo p < 0.05 标记。",
+          "fix": "给出模型、训练与测试区别、60 留出域话轮、其它行和显著性标记规则，分开 Table 2 聚类。",
+          "verification": "重开 S13 Tables 1–2。复核两种评估，确认两测试集各取 60 留出域话轮、D0T 三行模型、数值及同列检验标记。"
+        },
+        {
+          "issue_id": "I05",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "S06、S14、S17 来源索引及版本记录",
+          "evidence": "LSTM FKI-207-95 原件署 1995-08-21；S14 arXiv:2504.18474 于 2025-04-25 公开；S17 无版本 ACL 链接对应 v3，另有 2023-05-26 预印本。",
+          "fix": "分列首次公开和采用版本，固定 Diable v3 链接，挑战本身与 S03 会议论文时间分别说明。",
+          "verification": "重开 S18 署名页、S06 1997 期刊版、S14 预印本、S17 ACL v3 和 DSTC2 组织方通知。首次公开与采用版本分列。"
+        },
+        {
+          "issue_id": "I06",
+          "severity": "BLOCKER",
+          "status": "fixed",
+          "location": "Q07、Q11、C02 及相应覆盖和证据",
+          "evidence": "S02 Evaluation 报告 8 名组员的真实 10 次往返订票，7 次成功，成功样本 24.5 次查询、814 秒；另有清空对话但未取消后端交易的失败。",
+          "fix": "把实际结果、代价与失败机制单独入账，保留小样本与无受控反事实的条件。",
+          "verification": "重开 S02 Evaluation、Table 1 和 Dialogue Management。确认 C37 的实际分母、成功样本和完成时间，确认 C38 的本地清空、后端未撤销与重复去程结果。"
+        },
+        {
+          "issue_id": "I07",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q05、C11、C12、技术笔记 §4",
+          "evidence": "S05 §3.1 Fig. 6 是用户无关的选餐厅目标属性树，§4 才给推荐计划接口；S02 有票据 frame、状态分支及撤销/清空。",
+          "fix": "按原文定义用户模型和目标树，将规则、任务状态写入及后端副作用分开，并保留覆盖策略为推断。",
+          "verification": "重开 S05 §§3.1–4 与 S02 Dialogue Management，确认目标树、注册画像、票据框架和撤销规则，并区分覆盖推断。"
+        },
+        {
+          "issue_id": "I08",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q08、Q09、C20、C21、C28 相关覆盖与账本",
+          "evidence": "S09 Fig. 7/Table 5 有未见服务差距，S10 Table 4 有远低于 taxi 的留出域，S14 Table 6 有 DOTS 流式方法的同条件比较。",
+          "fix": "补代表性正反结果和可比条件，尤其是 DOTS 同底座 FINAL 条件下 Embed、Slot Conf、Revision 的不同槽和值结果。",
+          "verification": "重开 S09 Fig. 7/Table 5、S10 Table 4 与 S14 Table 6，确认迁移低分、DOTS FINAL 三行与两遍评估。未发现跨论文指标混比。"
+        },
+        {
+          "issue_id": "I09",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "Q09、Q10、C31、C32、C33",
+          "evidence": "S15 Table 5 指出预测摘要行对应 no-summary 类 5% 子采样；S16 MSC 是改造问答，Appendix B.2 文字和 Algorithm 1 分别写前 24 和 50 轮。",
+          "fix": "补预测摘要和 MSC 协议条件，记录训练窗口在原文内部有冲突。",
+          "verification": "复核 S15 Tables 4–5 的预测摘要采样、S16 Appendix B.1 问答协议，以及 Appendix B.2 与 Algorithm 1 的 24/50 轮差异。"
+        },
+        {
+          "issue_id": "I10",
+          "severity": "MINOR",
+          "status": "accepted",
+          "location": "Q11、coverage.json",
+          "evidence": "原始样例、作者数据和交易失败日志没有独立替换观测器和策略、并观察同一真实任务动作结果的受控反事实。",
+          "fix": "保留该受控反事实缺口，另按 I06 加入已知交易案例。",
+          "verification": "复核 Q11 的三个原文样例与 coverage.json。受控反事实缺口已缩至同一真实任务下可替换组件并观察业务后果。",
+          "rationale": "Q11 预先标为可选；已知失效可独立复核，缺口仅限所查材料无受控反事实，不影响该实例的记载。"
+        },
+        {
+          "issue_id": "I11",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "Q09、C40",
+          "evidence": "S14 §5.2 采用忽略大小写的值精确匹配、50% 阈值，槽精确率计入冗余候选错误。§6 将结果跨场景和三次复测平均。现稿只简述 DOTS 匹配口径。",
+          "fix": "如需支持评测复现，可在 C40 记录匹配规则和平均口径。",
+          "verification": "重开 S14 §5.2 与 Table 5。C40 的证据和实验条件及 Q09 已注明大小写无关的精确值匹配、至少 0.5 的阈值与冗余槽的精确率计数。保留 Table 6 数值与跨论文口径边界。"
+        },
+        {
+          "issue_id": "I12",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "references.md S18",
+          "evidence": "S18 前的空行使其在表格渲染中脱离表体。",
+          "fix": "如后续整理展示，可移除 S17 与 S18 之间的空行。",
+          "verification": "按 GFM 解析 references.md。S01–S18 全部位于同一表格，S18 链接和 C13、sources.json 的映射均保持完整。"
+        },
+        {
+          "issue_id": "I13",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "C10、evidence_matrix.md、technical_notes.md §3、S04 原文索引",
+          "evidence": "S04 §4.4 实际标题为 Illustration with real dialog data，扩展讨论及 Summary POMDP 属于 §4.5 Conclusions and future work。S04 引言误指 §4.4；当前 C10 及技术笔记仍用该误指。",
+          "fix": "用实际正文 §4.5（自印刷页 417 起，Summary POMDP 见 419–420 页及 Fig. 23）定位 Summary POMDP。保留 §2.2 Eqs. (9)–(15) 的因子化定位，区分 §4.4 的 SACTI-1 仿真。",
+          "verification": "核对 S04 正文章节标题和 Fig. 23。C10、证据矩阵、技术笔记与 S04 来源索引均已归于 §4.5；§2.2 的因子化定位保持正确，§4.4 的真实数据演示在日志中分列。"
+        },
+        {
+          "issue_id": "I14",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "research.md Q04，C09 语音信箱与旅行任务的正文表述",
+          "evidence": "Q04 在语音信箱语境仍称询问与确认都有成本，但 S04 §2.1 的动作集只有 ask、doSave、doDelete，Table 4 的交互成本 −1 对应 ask。confirm-to-x、confirm-from-x 与提前确认的 −3 来自 §4.1 的旅行任务仿真。",
+          "fix": "把语音信箱的交互成本归给询问；把确认动作及其条件单独写在旅行仿真。与 C09 及技术笔记的已正确动作集合保持一致。",
+          "verification": "重开 S04 §2.1、Fig. 3、Table 4 与 §4.1。Q04 的语音信箱只将交互成本归于 ask；旅行仿真的 confirm 及提前确认的代价另外表述。"
+        },
+        {
+          "issue_id": "I15",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "sources.json 和 references.md 的 S19 首发栏",
+          "evidence": "S19 封面署 2013 年 9 月；可定位的同期 ACL 公告于 2013-10-08 明确手册已可获得。封面日期不单独证明 9 月对外发布。",
+          "fix": "在版本栏保留封面日期。将首次可证的公开时间标为 2013-10 或 2013-10-08，或另附能证实 2013-09 已公开的同期来源。",
+          "verification": "核对 S19 固定 PDF 的封面及同 blob、2013-10-08 ACL 公告和索引。封面版本日期 2013-09 与 2013 年内已证公开分列，精确首发日期标为未证。"
+        },
+        {
+          "issue_id": "I16",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "references.md S09、sources.json S09（原运行终审 I15）",
+          "evidence": "已采用的版本标为 arXiv:1909.05855v2，PDF 地址未带 v2。arXiv 版本历史确认当前最新为 v2。https://arxiv.org/abs/1909.05855",
+          "fix": "主 PDF 入口固定到 https://arxiv.org/pdf/1909.05855v2，版本历史单列。",
+          "verification": "重开固定 arXiv PDF，首页自标 arXiv:1909.05855v2 与 29 Jan 2020。references.md 和 sources.json 均采用带 v2 的链接。"
+        },
+        {
+          "issue_id": "I17",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "Q09、C27、C40（原运行终审 I16）",
+          "evidence": "S13 §4 Models 明确主实验剔除 34 个重叠 D0T 域。S14 §6 将结果跨 10 个测试场景、三次复测平均。https://aclanthology.org/2024.sigdial-1.27.pdf#page=4 · https://aclanthology.org/2026.tacl-1.5.pdf#page=8",
+          "fix": "在对应结构化实验条件中补录训练域排除及平均口径。",
+          "verification": "重开 S13 §4 Models 与 Table 2，主 GenDSI 训练剔除 34 个与旅行相关域重叠的 D0T 域，另有 +all domains 条件。S14 §6 总述明确 10 个场景独立评分、三次重复取平均。C27、C40、证据矩阵及 Q09 均已记录。"
+        }
+      ]
+    },
+    {
+      "episode": "EP01",
+      "reviewer_id": "ep01-independent-final-b",
+      "review_session": "ep01-final-refresh-12-86f4e2ab",
+      "review_method": "independent_agent",
+      "verdict": "pass",
+      "reviewed_sha256": {
+        "scope_contract.json": "5bfc94c498741a62036225d45a23bd98f667039bee812853dbb0cd9ccfa91224",
+        "sources.json": "3a332e0fc9ae4491f173e530b06a0fd0d2ca75e8389aa63a34b29ca8df3dcb51",
+        "evidence_ledger.json": "ba2a4f3f834f80d9195d0e853bdbccc5ac21031e3589bbf5584d90fbe65fc6cc",
+        "evidence_matrix.md": "9d8045ba36f67000b1140f81bafe07350958477155ded08464d4837b9fa141e1",
+        "technical_notes.md": "3f012ae30706e408bde3ceed462650ab9cc6a5e62e22285072e6b915d39f4676",
+        "concepts.json": "b5deb14b01e6e27c2442246be546a110be167ca0e4850cbac803e1cb95f50c9c",
+        "research.md": "723b019bc51df4b5169e9d21eeab907e10597a224da007a24853087a35027fd6",
+        "episode_brief.md": "e43f16e983b342cf3caf094d3d4964c1221d63504e14c81140894ab665e44abd",
+        "research_plan.md": "540b3d0728663fbe76c19ce302ae8841dfac765043d9f65a80b1c4efa97ba6e2",
+        "research_questions.json": "e0f8a503efeeb050384d1f31210a4881c697a461afb8894e307d08952e8d5692",
+        "references.md": "9bd3542e529b36411c7fac6456e39475a346fdd9665b4f5e5a5d62502d1cdfe4",
+        "retrieval_log.md": "9cc575203da4abcb46c91e5d7e5eb5a2ae9c1e4440269bcb7c66349453f5d893",
+        "coverage.json": "087daf6c834912ce3c7d2f86c756bc1a3756e3e761fab11b8581968860e1c7a6",
+        "review_research.md": "e234ae6dc54df25f51316a037aac001a6f967ba73bb701555f0c4c47e5d5c589",
+        "review_research.json": "e6ece8fc7640f72ab9ae3d11d0e1ca99e5a7545b08af1eaacec4a14b3b4562ab"
+      },
+      "verified_claims": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07",
+        "C08",
+        "C09",
+        "C10",
+        "C11",
+        "C12",
+        "C13",
+        "C14",
+        "C15",
+        "C16",
+        "C17",
+        "C18",
+        "C19",
+        "C20",
+        "C21",
+        "C22",
+        "C23",
+        "C24",
+        "C25",
+        "C26",
+        "C27",
+        "C28",
+        "C29",
+        "C30",
+        "C31",
+        "C32",
+        "C33",
+        "C34",
+        "C35",
+        "C36",
+        "C37",
+        "C38",
+        "C39",
+        "C40"
+      ],
+      "reviewed_questions": [
+        "Q01",
+        "Q02",
+        "Q03",
+        "Q04",
+        "Q05",
+        "Q06",
+        "Q07",
+        "Q08",
+        "Q09",
+        "Q10",
+        "Q11"
+      ],
+      "hard_gates": {
+        "sources": true,
+        "mechanisms": true,
+        "traceability": true,
+        "chronology": true,
+        "failure_modes": true,
+        "comparison": true,
+        "scope": true,
+        "cross_episode": true,
+        "coverage": true,
+        "conditions": true,
+        "package": true
+      },
+      "scores": {
+        "facts": 30,
+        "coverage": 29,
+        "mechanisms": 15,
+        "conditions": 15,
+        "traceability": 9
+      },
+      "issues": [
+        {
+          "issue_id": "I01",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q07、C17、C05、证据矩阵、检索日志",
+          "evidence": "S08 Table 2 只有 RNN 行；S03 §3.2 识别 focus，Appendix A team0.entry1 给 0.719/0.464；S03 Table 4 为集成结果。",
+          "fix": "按表逐行归源，保留非等输入和成对显著性边界。",
+          "verification": "重开 S08 §5、Table 2 和 S03 §3.2、Appendix A，三组数值、输入、集成与显著性区分均通过。"
+        },
+        {
+          "issue_id": "I02",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q03、C06、技术笔记和证据矩阵",
+          "evidence": "S09 Slot Status Prediction Eq. (6) 周围列出 none、dontcare、active，现稿写 inactive。",
+          "fix": "采用原文标签并解释与活跃意图无结果和 Diable 无操作的区别。",
+          "verification": "重开 S09 v2 Eq. (6) 相邻段落。Q03、C06 和技术笔记均使用 none、dontcare、active，另分活跃意图 NONE。"
+        },
+        {
+          "issue_id": "I03",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q03、C05、技术笔记 §2",
+          "evidence": "S03 §3.2 刊载 q_t 为 SLU 质量之和，稿件写余量。作者脚本压缩包本次不可读。",
+          "fix": "核对可读作者实现，或将余量标记为归一化复原并注明印刷式与实现缺口。",
+          "verification": "复查 S19 固定 PDF 的 Git blob 与 §5.1–5.2。手册直接给出旧项权重、初值、零/满证据边界、请求字段重置与运行入口；S03 §3.2 仍保留不同刊载式，代码实施口径未被推断。"
+        },
+        {
+          "issue_id": "I04",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q08、Q09、C27、证据矩阵",
+          "evidence": "S13 Table 1 的 32.3/72.6 为 T5-SGD 对 D0T；另有 T5-D0T 和 GPT-D0T；原表有 Agresti–Caffo p < 0.05 标记。",
+          "fix": "给出模型、训练与测试区别、60 留出域话轮、其它行和显著性标记规则，分开 Table 2 聚类。",
+          "verification": "重开 S13 Tables 1–2。复核两种评估，确认两测试集各取 60 留出域话轮、D0T 三行模型、数值及同列检验标记。"
+        },
+        {
+          "issue_id": "I05",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "S06、S14、S17 来源索引及版本记录",
+          "evidence": "LSTM FKI-207-95 原件署 1995-08-21；S14 arXiv:2504.18474 于 2025-04-25 公开；S17 无版本 ACL 链接对应 v3，另有 2023-05-26 预印本。",
+          "fix": "分列首次公开和采用版本，固定 Diable v3 链接，挑战本身与 S03 会议论文时间分别说明。",
+          "verification": "重开 S18 署名页、S06 1997 期刊版、S14 预印本、S17 ACL v3 和 DSTC2 组织方通知。首次公开与采用版本分列。"
+        },
+        {
+          "issue_id": "I06",
+          "severity": "BLOCKER",
+          "status": "fixed",
+          "location": "Q07、Q11、C02 及相应覆盖和证据",
+          "evidence": "S02 Evaluation 报告 8 名组员的真实 10 次往返订票，7 次成功，成功样本 24.5 次查询、814 秒；另有清空对话但未取消后端交易的失败。",
+          "fix": "把实际结果、代价与失败机制单独入账，保留小样本与无受控反事实的条件。",
+          "verification": "重开 S02 Evaluation、Table 1 和 Dialogue Management。确认 C37 的实际分母、成功样本和完成时间，确认 C38 的本地清空、后端未撤销与重复去程结果。"
+        },
+        {
+          "issue_id": "I07",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q05、C11、C12、技术笔记 §4",
+          "evidence": "S05 §3.1 Fig. 6 是用户无关的选餐厅目标属性树，§4 才给推荐计划接口；S02 有票据 frame、状态分支及撤销/清空。",
+          "fix": "按原文定义用户模型和目标树，将规则、任务状态写入及后端副作用分开，并保留覆盖策略为推断。",
+          "verification": "重开 S05 §§3.1–4 与 S02 Dialogue Management，确认目标树、注册画像、票据框架和撤销规则，并区分覆盖推断。"
+        },
+        {
+          "issue_id": "I08",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "Q08、Q09、C20、C21、C28 相关覆盖与账本",
+          "evidence": "S09 Fig. 7/Table 5 有未见服务差距，S10 Table 4 有远低于 taxi 的留出域，S14 Table 6 有 DOTS 流式方法的同条件比较。",
+          "fix": "补代表性正反结果和可比条件，尤其是 DOTS 同底座 FINAL 条件下 Embed、Slot Conf、Revision 的不同槽和值结果。",
+          "verification": "重开 S09 Fig. 7/Table 5、S10 Table 4 与 S14 Table 6，确认迁移低分、DOTS FINAL 三行与两遍评估。未发现跨论文指标混比。"
+        },
+        {
+          "issue_id": "I09",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "Q09、Q10、C31、C32、C33",
+          "evidence": "S15 Table 5 指出预测摘要行对应 no-summary 类 5% 子采样；S16 MSC 是改造问答，Appendix B.2 文字和 Algorithm 1 分别写前 24 和 50 轮。",
+          "fix": "补预测摘要和 MSC 协议条件，记录训练窗口在原文内部有冲突。",
+          "verification": "复核 S15 Tables 4–5 的预测摘要采样、S16 Appendix B.1 问答协议，以及 Appendix B.2 与 Algorithm 1 的 24/50 轮差异。"
+        },
+        {
+          "issue_id": "I10",
+          "severity": "MINOR",
+          "status": "accepted",
+          "location": "Q11、coverage.json",
+          "evidence": "原始样例、作者数据和交易失败日志没有独立替换观测器和策略、并观察同一真实任务动作结果的受控反事实。",
+          "fix": "保留该受控反事实缺口，另按 I06 加入已知交易案例。",
+          "verification": "复核 Q11 的三个原文样例与 coverage.json。受控反事实缺口已缩至同一真实任务下可替换组件并观察业务后果。",
+          "rationale": "Q11 预先标为可选；已知失效可独立复核，缺口仅限所查材料无受控反事实，不影响该实例的记载。"
+        },
+        {
+          "issue_id": "I11",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "Q09、C40",
+          "evidence": "S14 §5.2 采用忽略大小写的值精确匹配、50% 阈值，槽精确率计入冗余候选错误。§6 将结果跨场景和三次复测平均。现稿只简述 DOTS 匹配口径。",
+          "fix": "如需支持评测复现，可在 C40 记录匹配规则和平均口径。",
+          "verification": "重开 S14 §5.2 与 Table 5。C40 的证据和实验条件及 Q09 已注明大小写无关的精确值匹配、至少 0.5 的阈值与冗余槽的精确率计数。保留 Table 6 数值与跨论文口径边界。"
+        },
+        {
+          "issue_id": "I12",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "references.md S18",
+          "evidence": "S18 前的空行使其在表格渲染中脱离表体。",
+          "fix": "如后续整理展示，可移除 S17 与 S18 之间的空行。",
+          "verification": "按 GFM 解析 references.md。S01–S18 全部位于同一表格，S18 链接和 C13、sources.json 的映射均保持完整。"
+        },
+        {
+          "issue_id": "I13",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "C10、evidence_matrix.md、technical_notes.md §3、S04 原文索引",
+          "evidence": "S04 §4.4 实际标题为 Illustration with real dialog data，扩展讨论及 Summary POMDP 属于 §4.5 Conclusions and future work。S04 引言误指 §4.4；当前 C10 及技术笔记仍用该误指。",
+          "fix": "用实际正文 §4.5（自印刷页 417 起，Summary POMDP 见 419–420 页及 Fig. 23）定位 Summary POMDP。保留 §2.2 Eqs. (9)–(15) 的因子化定位，区分 §4.4 的 SACTI-1 仿真。",
+          "verification": "核对 S04 正文章节标题和 Fig. 23。C10、证据矩阵、技术笔记与 S04 来源索引均已归于 §4.5；§2.2 的因子化定位保持正确，§4.4 的真实数据演示在日志中分列。"
+        },
+        {
+          "issue_id": "I14",
+          "severity": "MAJOR",
+          "status": "fixed",
+          "location": "research.md Q04，C09 语音信箱与旅行任务的正文表述",
+          "evidence": "Q04 在语音信箱语境仍称询问与确认都有成本，但 S04 §2.1 的动作集只有 ask、doSave、doDelete，Table 4 的交互成本 −1 对应 ask。confirm-to-x、confirm-from-x 与提前确认的 −3 来自 §4.1 的旅行任务仿真。",
+          "fix": "把语音信箱的交互成本归给询问；把确认动作及其条件单独写在旅行仿真。与 C09 及技术笔记的已正确动作集合保持一致。",
+          "verification": "重开 S04 §2.1、Fig. 3、Table 4 与 §4.1。Q04 的语音信箱只将交互成本归于 ask；旅行仿真的 confirm 及提前确认的代价另外表述。"
+        },
+        {
+          "issue_id": "I15",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "sources.json 和 references.md 的 S19 首发栏",
+          "evidence": "S19 封面署 2013 年 9 月；可定位的同期 ACL 公告于 2013-10-08 明确手册已可获得。封面日期不单独证明 9 月对外发布。",
+          "fix": "在版本栏保留封面日期。将首次可证的公开时间标为 2013-10 或 2013-10-08，或另附能证实 2013-09 已公开的同期来源。",
+          "verification": "核对 S19 固定 PDF 的封面及同 blob、2013-10-08 ACL 公告和索引。封面版本日期 2013-09 与 2013 年内已证公开分列，精确首发日期标为未证。"
+        },
+        {
+          "issue_id": "I16",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "references.md S09、sources.json S09（原运行终审 I15）",
+          "evidence": "已采用的版本标为 arXiv:1909.05855v2，PDF 地址未带 v2。arXiv 版本历史确认当前最新为 v2。https://arxiv.org/abs/1909.05855",
+          "fix": "主 PDF 入口固定到 https://arxiv.org/pdf/1909.05855v2，版本历史单列。",
+          "verification": "重开固定 arXiv PDF，首页自标 arXiv:1909.05855v2 与 29 Jan 2020。references.md 和 sources.json 均采用带 v2 的链接。"
+        },
+        {
+          "issue_id": "I17",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "Q09、C27、C40（原运行终审 I16）",
+          "evidence": "S13 §4 Models 明确主实验剔除 34 个重叠 D0T 域。S14 §6 将结果跨 10 个测试场景、三次复测平均。https://aclanthology.org/2024.sigdial-1.27.pdf#page=4 · https://aclanthology.org/2026.tacl-1.5.pdf#page=8",
+          "fix": "在对应结构化实验条件中补录训练域排除及平均口径。",
+          "verification": "重开 S13 §4 Models 与 Table 2，主 GenDSI 训练剔除 34 个与旅行相关域重叠的 D0T 域，另有 +all domains 条件。S14 §6 总述明确 10 个场景独立评分、三次重复取平均。C27、C40、证据矩阵及 Q09 均已记录。"
+        },
+        {
+          "issue_id": "I18",
+          "severity": "MINOR",
+          "status": "accepted",
+          "location": "S19 版本记录及 PDF 元数据",
+          "evidence": "采用 PDF 的封面署 2013 年 9 月，PDF 生成元数据标示 2014 年 11 月。ACL 2013-10-08 公告证实手册已可取得。https://www.aclweb.org/portal/node/1680",
+          "fix": "保留封面日期、可证公开时间与采用文件固定提交的区分。历史首发件的二进制可得时可另作文件级比较。",
+          "verification": "重算采用 PDF Git blob 为 0045280c679d6eb4d7efe5d45cf71ef2b09bf551，复核封面、PDF 元数据、ACL 公告及 §5.1。",
+          "rationale": "C05 以固定提交所标文本为证，精确首发日期和与历史首发文件的字节同一性无需作为公式成立的前提。"
+        }
+      ]
+    }
+  ],
+  "artifacts": {
+    "episode_brief.md": {
+      "path": "episode_brief.md",
+      "sha256": "e43f16e983b342cf3caf094d3d4964c1221d63504e14c81140894ab665e44abd"
+    },
+    "scope_contract.json": {
+      "path": "scope_contract.json",
+      "sha256": "5bfc94c498741a62036225d45a23bd98f667039bee812853dbb0cd9ccfa91224"
+    },
+    "research_plan.md": {
+      "path": "research_plan.md",
+      "sha256": "540b3d0728663fbe76c19ce302ae8841dfac765043d9f65a80b1c4efa97ba6e2"
+    },
+    "research_questions.json": {
+      "path": "research_questions.json",
+      "sha256": "e0f8a503efeeb050384d1f31210a4881c697a461afb8894e307d08952e8d5692"
+    },
+    "sources.json": {
+      "path": "sources.json",
+      "sha256": "3a332e0fc9ae4491f173e530b06a0fd0d2ca75e8389aa63a34b29ca8df3dcb51"
+    },
+    "references.md": {
+      "path": "references.md",
+      "sha256": "9bd3542e529b36411c7fac6456e39475a346fdd9665b4f5e5a5d62502d1cdfe4"
+    },
+    "retrieval_log.md": {
+      "path": "retrieval_log.md",
+      "sha256": "9cc575203da4abcb46c91e5d7e5eb5a2ae9c1e4440269bcb7c66349453f5d893"
+    },
+    "evidence_ledger.json": {
+      "path": "evidence_ledger.json",
+      "sha256": "ba2a4f3f834f80d9195d0e853bdbccc5ac21031e3589bbf5584d90fbe65fc6cc"
+    },
+    "evidence_matrix.md": {
+      "path": "evidence_matrix.md",
+      "sha256": "9d8045ba36f67000b1140f81bafe07350958477155ded08464d4837b9fa141e1"
+    },
+    "technical_notes.md": {
+      "path": "technical_notes.md",
+      "sha256": "3f012ae30706e408bde3ceed462650ab9cc6a5e62e22285072e6b915d39f4676"
+    },
+    "concepts.json": {
+      "path": "concepts.json",
+      "sha256": "b5deb14b01e6e27c2442246be546a110be167ca0e4850cbac803e1cb95f50c9c"
+    },
+    "research.md": {
+      "path": "research.md",
+      "sha256": "723b019bc51df4b5169e9d21eeab907e10597a224da007a24853087a35027fd6"
+    },
+    "coverage.json": {
+      "path": "coverage.json",
+      "sha256": "087daf6c834912ce3c7d2f86c756bc1a3756e3e761fab11b8581968860e1c7a6"
+    },
+    "review_research.md": {
+      "path": "review_research.md",
+      "sha256": "e234ae6dc54df25f51316a037aac001a6f967ba73bb701555f0c4c47e5d5c589"
+    },
+    "review_research.json": {
+      "path": "review_research.json",
+      "sha256": "e6ece8fc7640f72ab9ae3d11d0e1ca99e5a7545b08af1eaacec4a14b3b4562ab"
+    },
+    "review_final.md": {
+      "path": "review_final.md",
+      "sha256": "63a26c6f0f1a0149e905ec7e1d2dc3d8660c034b297d196dfba616d20f66f037"
+    },
+    "review_final.json": {
+      "path": "review_final.json",
+      "sha256": "2e014e58f8636ba193226bab988bfc730a771dff7ea7d331b2e6725f71d176a7"
+    },
+    "acceptance_report.md": {
+      "path": "acceptance_report.md",
+      "sha256": "f0e11ade0519a733d10147190e52020d849ae22429780955325a12d92834226d"
+    }
+  },
+  "schema": 2,
+  "coverage_counts": {
+    "covered": 10,
+    "partial": 1,
+    "unresolved": 0
+  },
+  "publication": {
+    "path": "episodes/EP01",
+    "primary_document": "research.md",
+    "paths": "relative to repository"
+  }
+}

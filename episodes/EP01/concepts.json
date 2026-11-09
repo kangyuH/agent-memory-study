@@ -1,0 +1,87 @@
+[
+  {
+    "key": "task_oriented_dialogue",
+    "value": "任务型对话围绕可执行目标、领域数据及动作约束组织，任务范围和表述空间可以不同。",
+    "claim_id": "C01"
+  },
+  {
+    "key": "semantic_frame",
+    "value": "语义框架是当前输入的结构化解释，可由对话管理器用于构造后端动作。",
+    "claim_id": "C02"
+  },
+  {
+    "key": "dialogue_state_tracking",
+    "value": "根据当前回合和先前对话信息更新任务状态，输出可为显式概率或结构化字段。",
+    "claim_id": "C04"
+  },
+  {
+    "key": "slot_scope",
+    "value": "目标约束、请求字段、当前意图与可操作后端对象分属不同接口或时间范围。",
+    "claim_id": "C04"
+  },
+  {
+    "key": "slot_value_lifecycle",
+    "value": "未更新、无偏好、显式清除和填入具体值有不同含义，定义依协议。",
+    "claim_id": "C06"
+  },
+  {
+    "key": "belief_state",
+    "value": "给定此前历史和当前动作观测的潜在状态概率分布，可供策略选择动作。",
+    "claim_id": "C08"
+  },
+  {
+    "key": "dialogue_policy",
+    "value": "把可用状态或信念映射成澄清、确认或业务操作等动作，依赖目标与代价。",
+    "claim_id": "C09"
+  },
+  {
+    "key": "persistent_user_profile",
+    "value": "绑定用户的持久信息，MATCH 中包括注册问卷得到的属性权重与偏好值。",
+    "claim_id": "C11"
+  },
+  {
+    "key": "task_local_cache",
+    "value": "为当前任务保留候选结果或运行所需数据，通常由任务流程控制其读写。",
+    "claim_id": "C02"
+  },
+  {
+    "key": "recurrent_hidden_state",
+    "value": "递推模型内部的数值状态，下一次计算可依赖它，是否持久化属于系统设计。",
+    "claim_id": "C13"
+  },
+  {
+    "key": "forget_gate",
+    "value": "对 LSTM 单元旧状态进行可学习衰减或重置的内部控制。",
+    "claim_id": "C14"
+  },
+  {
+    "key": "joint_goal_accuracy",
+    "value": "检查指定回合的整组目标约束是否与金标匹配，分数依数据版本、正规化和评测协议。",
+    "claim_id": "C16"
+  },
+  {
+    "key": "given_schema_transfer",
+    "value": "用外部提供的字段、意图或描述在新服务上预测，保持 Schema 是输入契约。",
+    "claim_id": "C21"
+  },
+  {
+    "key": "slot_schema_induction",
+    "value": "从对话发现并归并候选字段类型，产物是 Schema，评价有匹配规则和簇数偏差。",
+    "claim_id": "C26"
+  },
+  {
+    "key": "memory_operation_selection",
+    "value": "在明确操作集合上学习或决定外部记忆的写入、更新、删除或保留。",
+    "claim_id": "C32"
+  },
+  {
+    "key": "cross_session_memory",
+    "value": "由应用在会话之间保留并在后续输入或工具中重新获取的信息，收益需后续任务单独测量。",
+    "claim_id": "C34"
+  },
+  {
+    "key": "dialogue_reset_vs_backend_cancel",
+    "value": "重置对话运行状态和撤销已提交的外部业务操作有各自的生效路径。",
+    "claim_id": "C38"
+  }
+]
