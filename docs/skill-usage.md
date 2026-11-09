@@ -35,6 +35,8 @@
 
 自动检查覆盖格式、引用编号、可追溯性和状态。来源真伪、技术含义、实验可比性与结论边界由独立审核确认。审核分数档位先按试行值运行，结合后续验收结果校准。
 
+[验证记录](skill-validation.md)
+
 ```sh
 python3 -m unittest discover -s tests -v
 ```
