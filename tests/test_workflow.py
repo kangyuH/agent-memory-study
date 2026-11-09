@@ -138,6 +138,9 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(list(index["episodes"]), ["EP01", "EP02", "EP03"])
         self.assertEqual(index["episodes"]["EP01"]["fields"]["context"], "A server can stop responding.")
         self.assertEqual(index["episodes"]["EP03"]["prerequisites"], ["EP02"])
+        run = self.until(self.start(), "ACCEPTED")
+        release = self.call("release", "--run", run["run_dir"])
+        self.assertTrue((Path(release["release_dir"]) / "podcast_source.md").is_file())
 
     def test_expected_course_counts_detect_missing_trailing_episode(self):
         self.call("index", "--outline", self.outline, "--expected-episodes", 4, error="期数与预期不符")
@@ -166,6 +169,14 @@ class WorkflowTests(unittest.TestCase):
                 self.assertTrue((package / "podcast_source.md").is_file())
                 self.assertEqual(self.call("release", "--run", run["run_dir"]), release)
 
+    def test_engineering_and_frontier_entries_reach_plan(self):
+        for episode, token in (("EP19", "No-op"), ("EP36", "Self-Evolving")):
+            with self.subTest(episode=episode):
+                run = self.start(episode, outline=COURSE, extra=("--mode", "plan"))
+                scoped = json.loads(Path(run["scope_input"]).read_text(encoding="utf-8"))
+                self.assertIn(token, scoped["section"])
+                self.assertEqual(self.until(run, "PLAN_READY")["next_stage"], "SOURCES_VERIFIED")
+
     def test_fake_source_and_missing_primary(self):
         run = self.setup_stage(self.until(self.start(), "PLAN_READY"))
         for url in ("https://fake-paper.invalid/123", "https://localhost/secret", "https://example.com/fake"):
@@ -176,12 +187,17 @@ class WorkflowTests(unittest.TestCase):
         self.advance(run, error="关键来源")
         self.put(run, "sources.json", [self.source(kind="secondary")])
         self.advance(run, error="缺少已核验的一手来源")
-        self.assertEqual(self.call("status", "--run", run["run_dir"])["checkpoint"], "PLAN_READY")
+        status = self.call("status", "--run", run["run_dir"])
+        self.assertEqual(status["checkpoint"], "PLAN_READY")
+        self.assertEqual(status["attempt"], run["attempt"])
+        self.assertIn("缺少已核验的一手来源", status["last_failed_check"]["reason"])
 
     def test_source_deadline_and_duplicate_doi(self):
         run = self.setup_stage(self.until(self.start(), "PLAN_READY"))
         self.put(run, "sources.json", [self.source(first_public="2027")])
         self.advance(run, error="时间超出")
+        self.put(run, "sources.json", [self.source(doi="bad-doi")])
+        self.advance(run, error="DOI 格式错误")
         self.put(run, "sources.json", [self.source(doi="10.1000/same"),
             self.source(source_id="S02", url="https://www.iana.org/help", doi="10.1000/SAME")])
         self.advance(run, error="重复")

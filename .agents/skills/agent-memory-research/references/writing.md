@@ -4,4 +4,4 @@
 
 从审核通过的母稿提取一个主问题、约 3–4 个子问题和 2–3 个机制，沿一个已经出现在母稿的实例讲清关键取舍。保留结论成立条件、反证与易误读细节。压缩表格和公式时留下原文定位。对照母稿逐项检查新增的实验结果、年份、数值、定义和实例。资料稿软目标为 3,500–5,500 中文字，使用研究资料体裁，段落可直接用作 NotebookLM 来源。只使用母稿中已有的 `[Cnn]`。
 
-`notebooklm_source_list.md` 用 `[Snn]` 标注一至四份重点一手材料及各自用途，优先选二至四份。导入时以 `podcast_source.md` 为主，`research.md`、`references.md` 与 `evidence_matrix.md` 用于备查。默认停在资料交付。
+`notebooklm_source_list.md` 用 `[Snn]` 标注一至四份重点一手材料及各自用途，优先选二至四份。实际打开拟提供的链接。出版社限制直开时，附上可打开的备用原文并标明版本差异。验收报告沿用这些已核验的链接。导入时以 `podcast_source.md` 为主，`research.md`、`references.md` 与 `evidence_matrix.md` 用于备查。默认停在资料交付。

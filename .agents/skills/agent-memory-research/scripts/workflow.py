@@ -127,6 +127,7 @@ def describe(run_dir, run):
         "artifacts": {name: {**record, "path": str(run_dir / record["path"])}
                       for name, record in run["artifacts"].items()},
         "revisions": run["revisions"], "last_event": run["events"][-1],
+        "last_failed_check": (run.get("failed_checks") or [None])[-1],
     }
     if stage in {"RESEARCH_REVIEWED", "FINAL_REVIEWED"}:
         names = gates.review_files("research" if stage == "RESEARCH_REVIEWED" else "final")
@@ -296,18 +297,25 @@ def advance(args, run_dir, run, files):
     if run["mode"] == "batch":
         enforce_batch(Path(run["parameters"]["output_dir"]), run)
     source_files = {name: inbox(run_dir, run) / name for name in gates.STAGES[stage]}
-    records = copy_checkpoint(run_dir, stage, source_files)
-    copied = {name: run_dir / item["path"] for name, item in records.items()}
+    copied = {}
     try:
-        gates.check(stage, {**files, **copied}, run)
-    except (ValueError, OSError):
-        shutil.rmtree(next(iter(copied.values())).parent)
+        records = copy_checkpoint(run_dir, stage, source_files)
+        copied = {name: run_dir / item["path"] for name, item in records.items()}
+        combined = {**files, **copied}
+        gates.check(stage, combined, run)
+        details = {"artifacts": records}
+        if stage == "EVIDENCE_BUILT":
+            details["cross_episode_conflicts"] = conflicts(run, combined)
+    except (ValueError, OSError) as error:
+        if copied:
+            shutil.rmtree(next(iter(copied.values())).parent)
+        run.setdefault("failed_checks", []).append({
+            "time": now(), "stage": stage, "attempt": args.attempt, "reason": str(error),
+        })
+        write_json(run_dir / "manifest.json", run)
         raise
     run["artifacts"].update(records)
     run["state"] = run["checkpoint"] = stage
-    details = {"artifacts": records}
-    if stage == "EVIDENCE_BUILT":
-        details["cross_episode_conflicts"] = conflicts(run, {**files, **copied})
     event(run, "advance", details=details)
 
 
