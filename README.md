@@ -11,6 +11,12 @@
 | [调研职责边界与资料交付修订](reference/03_调研职责边界与资料交付修订.md) | 查看现行调研范围、资料产物与覆盖验收规则。 |
 | [Skill 使用说明](docs/skill-usage.md) | 从 Codex 启动单期研究、恢复中断或导出经过审核的资料包。 |
 
+## 已归档研究资料
+
+| 期数 | 主要资料 | 复查入口 |
+| --- | --- | --- |
+| EP01 从任务型对话到 LLM | [研究汇总](episodes/EP01/research.md) · [一手来源](episodes/EP01/references.md) | [问题覆盖](episodes/EP01/coverage.json) · [验收报告](episodes/EP01/acceptance_report.md) · [完整清单](episodes/EP01/manifest.json) |
+
 ## 项目进度
 
 课程大纲和设计任务书已入库。仓库提供 [Skill 设计](docs/skill-design.md) 与 [实现入口](.agents/skills/agent-memory-research/SKILL.md)。
