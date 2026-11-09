@@ -8,10 +8,11 @@
 | --- | --- |
 | [Agent Memory 课程主线](reference/01_Agent_Memory_内容主线.md) | 查看九个主题、EP01–EP36、每期核心问题和跨期依赖。以此为课程范围和编号的依据。 |
 | [可复用 Skill 设计任务书](reference/02_交给Codex的可复用Skill设计任务书.md) | 查看研究流程、产物约定、审核门槛、恢复策略和测试要求。 |
+| [Skill 使用说明](docs/skill-usage.md) | 从 Codex 启动单期研究、恢复中断或导出经过审核的资料包。 |
 
 ## 项目进度
 
-课程大纲和设计任务书已入库。当前工作是把任务书转成可审阅的设计方案，再用单期试点验证流程。
+课程大纲和设计任务书已入库。仓库提供 [Skill 设计](docs/skill-design.md) 与 [实现入口](.agents/skills/agent-memory-research/SKILL.md)。
 
 | 顺序 | 阶段 | 完成条件 |
 | --- | --- | --- |
