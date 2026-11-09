@@ -234,7 +234,7 @@
     "status": "verified",
     "required": true,
     "checked_on": "2026-11-09",
-    "locator": "§§2–4、Tables 3–4、7、Appendix C",
+    "locator": "§§2–5、Tables 3–5、7、Appendix C",
     "note": "MSC 多会话、人工和预测摘要、历史访问对开场语言模型指标的影响。",
     "doi": "10.18653/v1/2022.acl-long.356"
   },

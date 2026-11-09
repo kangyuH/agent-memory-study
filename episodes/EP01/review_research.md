@@ -1,3 +1,20 @@
+# EP01 材料增量审核
+
+**通过。** 本次会话为 `ep01-pr5-materials-amend-6f23e161`，复核发布版本 `008d813ef5941de9` 的局部勘误。原始审核分数和未变更部分的核验记录沿用前版。本次绑定的是修订后的文件快照。
+
+## PR #5 材料增量复核
+
+会话 `ep01-pr5-materials-amend-6f23e161` 通过本次复核，重新计算工作流规定的 13 份材料哈希。与上一版已验收资料比较，差异限于账本、矩阵、研究主文和两个来源索引文件中的 C04、C06、C25、C31。沿用前次逐题审核对未改动主张的结论。本次另抽查 Q08–Q11 的 TRADE、GenDSI、DOTS、MSC、Memory-R1 和原始失败样例，10 个必答题仍已覆盖，Q11 保留同一真实任务受控复测的缺口。
+
+- I19 已关闭。DSTC2 的 §2.1 支持修订后的请求字段定义，§2.3 Table 2 和附录 B 支持目标约束可变。 [DSTC2 原文](https://aclanthology.org/W14-4337.pdf#page=2)
+- I20 已关闭。SGD v2 的 User Goal 段及式 (6)–(9) 区分保留旧值、写入无偏好和进一步预测值。 [SGD v2 原文](https://arxiv.org/pdf/1909.05855v2#page=6)
+- I21 已关闭。IC-DST 的 §4 和 Table 1 继续支持两版 MultiWOZ 结果，1% 示例池与每提示 10 或 5 个示例分别核对。 [IC-DST 正式版](https://aclanthology.org/anthology-files/pdf/findings/2022.findings-emnlp.193.pdf#page=6)
+- I22 已关闭。MSC 的 §5 和 Tables 4–5 支持预测摘要 5% 子采样条件及第 2 会话开场结果。 [MSC 正式版](https://aclanthology.org/2022.acl-long.356.pdf#page=6)
+
+---
+
+以下是前版审核原文，所列收件批次、快照和检查均对应前版。
+
 # EP01 研究资料独立复审
 
 **通过，98/100。** 本次复查来源刷新运行第 11 次收件，独立审核会话为 `ep01-materials-refresh-11-b7e6d9a2`。以本运行第 6 次收件审核为对照，重算两份快照的全部 13 个绑定文件哈希。7 个文件有差异，均属本轮修订。Q01–Q11 与 C01–C40 的审核范围完整。I01–I09、I11–I12 的闭合延续，I10 的可选缺口继续接受。I13–I17 均已修复。

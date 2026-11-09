@@ -84,7 +84,7 @@
       "Q02",
       "Q03"
     ],
-    "statement": "DSTC2 分开标注与跟踪目标约束、请求字段和搜索方式。目标可在对话中改变；请求字段表示针对当前候选实体索取的信息，搜索方式含按条件、按名称、要备选等。",
+    "statement": "DSTC2 分开标注与跟踪目标约束、请求字段和搜索方式。目标可在对话中改变。请求字段是用户已询问取值、系统应告知的字段集合。搜索方式包括按条件搜索、按名称搜索和索要备选等。",
     "category": "FACT",
     "critical": true,
     "confidence": "high",
@@ -94,7 +94,7 @@
     "evidence": [
       {
         "source_id": "S03",
-        "locator": "§2.1、§4.1、Appendix B",
+        "locator": "§2.1、§2.3 Table 2、Appendix B",
         "note": "检查三类标签及逐轮样例，目标可改变。"
       }
     ]
@@ -145,7 +145,7 @@
     "evidence": [
       {
         "source_id": "S09",
-        "locator": "Model Architecture，Slot Status Prediction 和 Categorical/Non-categorical Slot Value",
+        "locator": "§5.1 Model，Model Architecture 的 User Goal 段，Eqs. (6)–(9)",
         "note": "三个槽状态是 none、dontcare、active；另有活跃意图的 NONE 候选。"
       }
     ]
@@ -624,7 +624,7 @@
     "evidence": [
       {
         "source_id": "S12",
-        "locator": "§4.2、Table 1 及紧随的实验配置",
+        "locator": "Table 1 及紧随的实验配置、§4 Few-shot DST on MultiWOZ",
         "note": "核对 1% 训练示例池、两个数据版本和提示示例设置。"
       }
     ],
@@ -791,7 +791,7 @@
     "evidence": [
       {
         "source_id": "S15",
-        "locator": "§4、Table 4 及表注",
+        "locator": "§5 Predicted summary models、Tables 4–5",
         "note": "第 2 会话开场列与 BST 2.7B-1024 配置。"
       }
     ],
@@ -804,7 +804,7 @@
       "metric": "validation perplexity",
       "result": "9.96、7.55、6.98、7.44，按前述顺序",
       "significance": "该表未报告此四列比较的显著性",
-      "conditions": "仅取 Table 4 第 2 会话开场列。预测摘要对应 §4/Table 5 的无总结标签 K=5% 子采样配置。"
+      "conditions": "仅取 Table 4 第 2 会话开场列。预测摘要对应 §5 和 Table 5 的无总结标签 K=5% 子采样配置。"
     }
   },
   {

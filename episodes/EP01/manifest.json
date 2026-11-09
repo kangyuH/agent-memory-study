@@ -1,5 +1,5 @@
 {
-  "version": "008d813ef5941de9",
+  "version": "105357235ccd9931",
   "run_id": "0624eb19a2ab020559be1cfe",
   "state": "ACCEPTED",
   "parameters": {
@@ -17,28 +17,28 @@
     "force_refresh_sources": true,
     "refresh_id": "dstc2-handbook-terminal"
   },
-  "accepted_at": "2026-11-09T10:34:52.674186+00:00",
+  "accepted_at": "2026-11-09T21:59:36.733175+08:00",
   "source_count": 19,
   "claim_count": 40,
   "audits": [
     {
       "episode": "EP01",
-      "reviewer_id": "ep01-independent-materials-a",
-      "review_session": "ep01-materials-refresh-11-b7e6d9a2",
+      "reviewer_id": "ep01-pr5-independent-materials",
+      "review_session": "ep01-pr5-materials-amend-6f23e161",
       "review_method": "independent_agent",
       "verdict": "pass",
       "reviewed_sha256": {
         "scope_contract.json": "5bfc94c498741a62036225d45a23bd98f667039bee812853dbb0cd9ccfa91224",
-        "sources.json": "3a332e0fc9ae4491f173e530b06a0fd0d2ca75e8389aa63a34b29ca8df3dcb51",
-        "evidence_ledger.json": "ba2a4f3f834f80d9195d0e853bdbccc5ac21031e3589bbf5584d90fbe65fc6cc",
-        "evidence_matrix.md": "9d8045ba36f67000b1140f81bafe07350958477155ded08464d4837b9fa141e1",
+        "sources.json": "c8dcff221baa7e67f1b47a5db4e1eac51b51a8e5b032c701f73f690d9c28a614",
+        "evidence_ledger.json": "6860dbd8a3b2093d8a9a4a2aabdab7de993929006b2266e06020dc4b8cc9ede1",
+        "evidence_matrix.md": "1542f0ab7835e6326d9a1239a1ec5098253f1f3208681b2bbefd43ebb7407cae",
         "technical_notes.md": "3f012ae30706e408bde3ceed462650ab9cc6a5e62e22285072e6b915d39f4676",
         "concepts.json": "b5deb14b01e6e27c2442246be546a110be167ca0e4850cbac803e1cb95f50c9c",
-        "research.md": "723b019bc51df4b5169e9d21eeab907e10597a224da007a24853087a35027fd6",
+        "research.md": "9c35e3a61b76e4c6621120a66f93ffff7e23a3c8eadc672ed299b3d2313b7f4b",
         "episode_brief.md": "e43f16e983b342cf3caf094d3d4964c1221d63504e14c81140894ab665e44abd",
         "research_plan.md": "540b3d0728663fbe76c19ce302ae8841dfac765043d9f65a80b1c4efa97ba6e2",
         "research_questions.json": "e0f8a503efeeb050384d1f31210a4881c697a461afb8894e307d08952e8d5692",
-        "references.md": "9bd3542e529b36411c7fac6456e39475a346fdd9665b4f5e5a5d62502d1cdfe4",
+        "references.md": "cbf07c3cd67782ce9a91be4647ba13777d1953db50843511bbd06fcccc408416",
         "retrieval_log.md": "9cc575203da4abcb46c91e5d7e5eb5a2ae9c1e4440269bcb7c66349453f5d893",
         "coverage.json": "087daf6c834912ce3c7d2f86c756bc1a3756e3e761fab11b8581968860e1c7a6"
       },
@@ -270,31 +270,98 @@
           "evidence": "S13 §4 Models 明确主实验剔除 34 个重叠 D0T 域。S14 §6 将结果跨 10 个测试场景、三次复测平均。https://aclanthology.org/2024.sigdial-1.27.pdf#page=4 · https://aclanthology.org/2026.tacl-1.5.pdf#page=8",
           "fix": "在对应结构化实验条件中补录训练域排除及平均口径。",
           "verification": "重开 S13 §4 Models 与 Table 2，主 GenDSI 训练剔除 34 个与旅行相关域重叠的 D0T 域，另有 +all domains 条件。S14 §6 总述明确 10 个场景独立评分、三次重复取平均。C27、C40、证据矩阵及 Q09 均已记录。"
+        },
+        {
+          "issue_id": "I19",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "C04，evidence_ledger.json、evidence_matrix.md",
+          "evidence": "S03 §2.1 定义请求字段为用户询问且系统应提供值的字段。§2.3 Table 2 统计目标约束变化，Appendix B 并列显示三类标签。",
+          "fix": "按一般定义改写请求字段，引用 §2.1、§2.3 Table 2 和 Appendix B。",
+          "verification": "重开 https://aclanthology.org/W14-4337.pdf，核对三类标签、搜索方式、目标变化与原始对话样例。账本和矩阵的定义、定位一致。"
+        },
+        {
+          "issue_id": "I20",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "C06，evidence_ledger.json、evidence_matrix.md",
+          "evidence": "S09 v2 §5.1 Model Architecture 的 User Goal 段以 Eq. (6) 预测槽状态、Eq. (7) 比较类别值、Eqs. (8)–(9) 预测非类别值的文本跨度。",
+          "fix": "以原文段名和 Eqs. (6)–(9) 替换原定位。",
+          "verification": "重开 https://arxiv.org/pdf/1909.05855v2，核对 none 保留旧值、dontcare 写入特殊值、active 进入取值阶段。相邻 Active Intent 段的 NONE 候选独立定义。"
+        },
+        {
+          "issue_id": "I21",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "C25，evidence_ledger.json、evidence_matrix.md",
+          "evidence": "S12 的少样本结果见 §4 的 Few-shot DST on MultiWOZ 段和 Table 1。每提示示例数见表后的实验配置。",
+          "fix": "用 §4 的段名和 Table 1 及其后的配置替换 §4.2 定位。",
+          "verification": "重开 https://aclanthology.org/anthology-files/pdf/findings/2022.findings-emnlp.193.pdf，核对 1% 池下 Codex-davinci 在两版 MultiWOZ 上的 43.13/48.35，及 Codex、GPT-Neo 分别使用 10、5 个提示示例。"
+        },
+        {
+          "issue_id": "I22",
+          "severity": "MINOR",
+          "status": "fixed",
+          "location": "C31、S15 与 Q10，evidence_ledger.json、evidence_matrix.md、references.md、research.md、sources.json",
+          "evidence": "S15 §5 的 Predicted summary models 段明确把 Table 4 的预测摘要行关联到 Table 5 的 no-summary 标签 K=5% 子采样配置。",
+          "fix": "对齐研究主文、账本、矩阵和来源索引的原文定位。",
+          "verification": "重开 https://aclanthology.org/2022.acl-long.356.pdf，核对 §5 与 Tables 4–5。第 2 会话开场验证困惑度为 9.96、7.55、6.98、7.44，预测摘要的子采样条件与原文一致。"
         }
-      ]
+      ],
+      "amendment": {
+        "base_commit": "b6a4ea8d52c75a9cd029879a5edc794c3a63c117",
+        "base_version": "008d813ef5941de9",
+        "scope": "incremental_review_with_prior_audit_of_unchanged_content",
+        "previous_review": {
+          "reviewer_id": "ep01-independent-materials-a",
+          "review_session": "ep01-materials-refresh-11-b7e6d9a2",
+          "scores": {
+            "facts": 29,
+            "coverage": 29,
+            "mechanisms": 15,
+            "conditions": 15,
+            "traceability": 10
+          },
+          "reviewed_sha256": {
+            "scope_contract.json": "5bfc94c498741a62036225d45a23bd98f667039bee812853dbb0cd9ccfa91224",
+            "sources.json": "3a332e0fc9ae4491f173e530b06a0fd0d2ca75e8389aa63a34b29ca8df3dcb51",
+            "evidence_ledger.json": "ba2a4f3f834f80d9195d0e853bdbccc5ac21031e3589bbf5584d90fbe65fc6cc",
+            "evidence_matrix.md": "9d8045ba36f67000b1140f81bafe07350958477155ded08464d4837b9fa141e1",
+            "technical_notes.md": "3f012ae30706e408bde3ceed462650ab9cc6a5e62e22285072e6b915d39f4676",
+            "concepts.json": "b5deb14b01e6e27c2442246be546a110be167ca0e4850cbac803e1cb95f50c9c",
+            "research.md": "723b019bc51df4b5169e9d21eeab907e10597a224da007a24853087a35027fd6",
+            "episode_brief.md": "e43f16e983b342cf3caf094d3d4964c1221d63504e14c81140894ab665e44abd",
+            "research_plan.md": "540b3d0728663fbe76c19ce302ae8841dfac765043d9f65a80b1c4efa97ba6e2",
+            "research_questions.json": "e0f8a503efeeb050384d1f31210a4881c697a461afb8894e307d08952e8d5692",
+            "references.md": "9bd3542e529b36411c7fac6456e39475a346fdd9665b4f5e5a5d62502d1cdfe4",
+            "retrieval_log.md": "9cc575203da4abcb46c91e5d7e5eb5a2ae9c1e4440269bcb7c66349453f5d893",
+            "coverage.json": "087daf6c834912ce3c7d2f86c756bc1a3756e3e761fab11b8581968860e1c7a6"
+          }
+        }
+      }
     },
     {
       "episode": "EP01",
-      "reviewer_id": "ep01-independent-final-b",
-      "review_session": "ep01-final-refresh-12-86f4e2ab",
+      "reviewer_id": "ep01-pr5-independent-final",
+      "review_session": "ep01-pr5-final-amend-529d51a8",
       "review_method": "independent_agent",
       "verdict": "pass",
       "reviewed_sha256": {
         "scope_contract.json": "5bfc94c498741a62036225d45a23bd98f667039bee812853dbb0cd9ccfa91224",
-        "sources.json": "3a332e0fc9ae4491f173e530b06a0fd0d2ca75e8389aa63a34b29ca8df3dcb51",
-        "evidence_ledger.json": "ba2a4f3f834f80d9195d0e853bdbccc5ac21031e3589bbf5584d90fbe65fc6cc",
-        "evidence_matrix.md": "9d8045ba36f67000b1140f81bafe07350958477155ded08464d4837b9fa141e1",
+        "sources.json": "c8dcff221baa7e67f1b47a5db4e1eac51b51a8e5b032c701f73f690d9c28a614",
+        "evidence_ledger.json": "6860dbd8a3b2093d8a9a4a2aabdab7de993929006b2266e06020dc4b8cc9ede1",
+        "evidence_matrix.md": "1542f0ab7835e6326d9a1239a1ec5098253f1f3208681b2bbefd43ebb7407cae",
         "technical_notes.md": "3f012ae30706e408bde3ceed462650ab9cc6a5e62e22285072e6b915d39f4676",
         "concepts.json": "b5deb14b01e6e27c2442246be546a110be167ca0e4850cbac803e1cb95f50c9c",
-        "research.md": "723b019bc51df4b5169e9d21eeab907e10597a224da007a24853087a35027fd6",
+        "research.md": "9c35e3a61b76e4c6621120a66f93ffff7e23a3c8eadc672ed299b3d2313b7f4b",
         "episode_brief.md": "e43f16e983b342cf3caf094d3d4964c1221d63504e14c81140894ab665e44abd",
         "research_plan.md": "540b3d0728663fbe76c19ce302ae8841dfac765043d9f65a80b1c4efa97ba6e2",
         "research_questions.json": "e0f8a503efeeb050384d1f31210a4881c697a461afb8894e307d08952e8d5692",
-        "references.md": "9bd3542e529b36411c7fac6456e39475a346fdd9665b4f5e5a5d62502d1cdfe4",
+        "references.md": "cbf07c3cd67782ce9a91be4647ba13777d1953db50843511bbd06fcccc408416",
         "retrieval_log.md": "9cc575203da4abcb46c91e5d7e5eb5a2ae9c1e4440269bcb7c66349453f5d893",
         "coverage.json": "087daf6c834912ce3c7d2f86c756bc1a3756e3e761fab11b8581968860e1c7a6",
-        "review_research.md": "e234ae6dc54df25f51316a037aac001a6f967ba73bb701555f0c4c47e5d5c589",
-        "review_research.json": "e6ece8fc7640f72ab9ae3d11d0e1ca99e5a7545b08af1eaacec4a14b3b4562ab"
+        "review_research.md": "dd0279b7102e7e794ad96144e275a453a48c0c124dec0ffa11c0ceb49acadc56",
+        "review_research.json": "314b618bf5d9c3e735925824df33f65b507793341fa45716a8fb2bf253ec369b"
       },
       "verified_claims": [
         "C01",
@@ -535,8 +602,77 @@
           "fix": "保留封面日期、可证公开时间与采用文件固定提交的区分。历史首发件的二进制可得时可另作文件级比较。",
           "verification": "重算采用 PDF Git blob 为 0045280c679d6eb4d7efe5d45cf71ef2b09bf551，复核封面、PDF 元数据、ACL 公告及 §5.1。",
           "rationale": "C05 以固定提交所标文本为证，精确首发日期和与历史首发文件的字节同一性无需作为公式成立的前提。"
+        },
+        {
+          "issue_id": "I19",
+          "location": "C04，证据账本及矩阵",
+          "evidence": "S03 正式版第 2 页 §2.1 定义请求字段。第 3 页 §2.3 Table 2 统计各槽目标约束改变比例，第 10 页 Appendix B 含逐轮示例。",
+          "fix": "按一般定义改写请求字段，更新章节与表定位。",
+          "verification": "重读原文并比对修订后账本与矩阵，请求字段、搜索方式和目标约束变化的描述均得到支持。",
+          "severity": "MINOR",
+          "status": "fixed"
+        },
+        {
+          "issue_id": "I20",
+          "location": "C06，证据账本及矩阵",
+          "evidence": "S09 固定 v2 的 §5.1 Model Architecture 内 User Goal 段明确区分三种槽状态，式 (6)–(9) 分别定位状态、类别值与非类别值跨度。",
+          "fix": "将定位细化到 User Goal 段与对应公式。",
+          "verification": "重读 v2 正文，核对保留旧值、特殊无偏好值和进入取值阶段的语义。新定位与账本、矩阵一致。",
+          "severity": "MINOR",
+          "status": "fixed"
+        },
+        {
+          "issue_id": "I21",
+          "location": "C25，证据账本及矩阵",
+          "evidence": "S12 正式版第 6 页 Table 1 与 §4 的少样本结果及表后配置说明。",
+          "fix": "引用 Table 1、表后配置及 §4 Few-shot DST on MultiWOZ。",
+          "verification": "重读正式版，核对 1% 训练示例池的 43.13/48.35，Codex 与 GPT-Neo 的每提示示例数分别为 10/5，原结论适用条件完整。",
+          "severity": "MINOR",
+          "status": "fixed"
+        },
+        {
+          "issue_id": "I22",
+          "location": "C31、Q10、S15，主文、账本、矩阵及两份来源索引",
+          "evidence": "S15 正式版 Tables 4–5 与 §5 Predicted summary models 将 5% 无总结标签采样的模型和 Table 4 预测摘要行对应。",
+          "fix": "同步更正 §5 和 Tables 4–5 的定位。",
+          "verification": "重读两表和 §5，确认第 2 会话开场验证困惑度依次为 9.96、7.55、6.98、7.44，预测摘要对应 K=5%。",
+          "severity": "MINOR",
+          "status": "fixed"
         }
-      ]
+      ],
+      "amendment": {
+        "base_commit": "b6a4ea8d52c75a9cd029879a5edc794c3a63c117",
+        "base_version": "008d813ef5941de9",
+        "scope": "incremental_review_with_prior_audit_of_unchanged_content",
+        "previous_review": {
+          "reviewer_id": "ep01-independent-final-b",
+          "review_session": "ep01-final-refresh-12-86f4e2ab",
+          "scores": {
+            "facts": 30,
+            "coverage": 29,
+            "mechanisms": 15,
+            "conditions": 15,
+            "traceability": 9
+          },
+          "reviewed_sha256": {
+            "scope_contract.json": "5bfc94c498741a62036225d45a23bd98f667039bee812853dbb0cd9ccfa91224",
+            "sources.json": "3a332e0fc9ae4491f173e530b06a0fd0d2ca75e8389aa63a34b29ca8df3dcb51",
+            "evidence_ledger.json": "ba2a4f3f834f80d9195d0e853bdbccc5ac21031e3589bbf5584d90fbe65fc6cc",
+            "evidence_matrix.md": "9d8045ba36f67000b1140f81bafe07350958477155ded08464d4837b9fa141e1",
+            "technical_notes.md": "3f012ae30706e408bde3ceed462650ab9cc6a5e62e22285072e6b915d39f4676",
+            "concepts.json": "b5deb14b01e6e27c2442246be546a110be167ca0e4850cbac803e1cb95f50c9c",
+            "research.md": "723b019bc51df4b5169e9d21eeab907e10597a224da007a24853087a35027fd6",
+            "episode_brief.md": "e43f16e983b342cf3caf094d3d4964c1221d63504e14c81140894ab665e44abd",
+            "research_plan.md": "540b3d0728663fbe76c19ce302ae8841dfac765043d9f65a80b1c4efa97ba6e2",
+            "research_questions.json": "e0f8a503efeeb050384d1f31210a4881c697a461afb8894e307d08952e8d5692",
+            "references.md": "9bd3542e529b36411c7fac6456e39475a346fdd9665b4f5e5a5d62502d1cdfe4",
+            "retrieval_log.md": "9cc575203da4abcb46c91e5d7e5eb5a2ae9c1e4440269bcb7c66349453f5d893",
+            "coverage.json": "087daf6c834912ce3c7d2f86c756bc1a3756e3e761fab11b8581968860e1c7a6",
+            "review_research.md": "e234ae6dc54df25f51316a037aac001a6f967ba73bb701555f0c4c47e5d5c589",
+            "review_research.json": "e6ece8fc7640f72ab9ae3d11d0e1ca99e5a7545b08af1eaacec4a14b3b4562ab"
+          }
+        }
+      }
     }
   ],
   "artifacts": {
@@ -558,11 +694,11 @@
     },
     "sources.json": {
       "path": "sources.json",
-      "sha256": "3a332e0fc9ae4491f173e530b06a0fd0d2ca75e8389aa63a34b29ca8df3dcb51"
+      "sha256": "c8dcff221baa7e67f1b47a5db4e1eac51b51a8e5b032c701f73f690d9c28a614"
     },
     "references.md": {
       "path": "references.md",
-      "sha256": "9bd3542e529b36411c7fac6456e39475a346fdd9665b4f5e5a5d62502d1cdfe4"
+      "sha256": "cbf07c3cd67782ce9a91be4647ba13777d1953db50843511bbd06fcccc408416"
     },
     "retrieval_log.md": {
       "path": "retrieval_log.md",
@@ -570,11 +706,11 @@
     },
     "evidence_ledger.json": {
       "path": "evidence_ledger.json",
-      "sha256": "ba2a4f3f834f80d9195d0e853bdbccc5ac21031e3589bbf5584d90fbe65fc6cc"
+      "sha256": "6860dbd8a3b2093d8a9a4a2aabdab7de993929006b2266e06020dc4b8cc9ede1"
     },
     "evidence_matrix.md": {
       "path": "evidence_matrix.md",
-      "sha256": "9d8045ba36f67000b1140f81bafe07350958477155ded08464d4837b9fa141e1"
+      "sha256": "1542f0ab7835e6326d9a1239a1ec5098253f1f3208681b2bbefd43ebb7407cae"
     },
     "technical_notes.md": {
       "path": "technical_notes.md",
@@ -586,7 +722,7 @@
     },
     "research.md": {
       "path": "research.md",
-      "sha256": "723b019bc51df4b5169e9d21eeab907e10597a224da007a24853087a35027fd6"
+      "sha256": "9c35e3a61b76e4c6621120a66f93ffff7e23a3c8eadc672ed299b3d2313b7f4b"
     },
     "coverage.json": {
       "path": "coverage.json",
@@ -594,23 +730,23 @@
     },
     "review_research.md": {
       "path": "review_research.md",
-      "sha256": "e234ae6dc54df25f51316a037aac001a6f967ba73bb701555f0c4c47e5d5c589"
+      "sha256": "dd0279b7102e7e794ad96144e275a453a48c0c124dec0ffa11c0ceb49acadc56"
     },
     "review_research.json": {
       "path": "review_research.json",
-      "sha256": "e6ece8fc7640f72ab9ae3d11d0e1ca99e5a7545b08af1eaacec4a14b3b4562ab"
+      "sha256": "314b618bf5d9c3e735925824df33f65b507793341fa45716a8fb2bf253ec369b"
     },
     "review_final.md": {
       "path": "review_final.md",
-      "sha256": "63a26c6f0f1a0149e905ec7e1d2dc3d8660c034b297d196dfba616d20f66f037"
+      "sha256": "179ab86f72b0d8e58bd4a72f501b8605ba17fc5e9c18606e174b983c8c648b2d"
     },
     "review_final.json": {
       "path": "review_final.json",
-      "sha256": "2e014e58f8636ba193226bab988bfc730a771dff7ea7d331b2e6725f71d176a7"
+      "sha256": "eb7c71185c839ec6338f9a4cea9026ef8c2345d5d012dbd71d06495447aa83e2"
     },
     "acceptance_report.md": {
       "path": "acceptance_report.md",
-      "sha256": "f0e11ade0519a733d10147190e52020d849ae22429780955325a12d92834226d"
+      "sha256": "654452e325ecfb497d0473070bff5e1b769ec0032b60935dcc9dbf40a01d75a8"
     }
   },
   "schema": 2,
@@ -618,10 +754,5 @@
     "covered": 10,
     "partial": 1,
     "unresolved": 0
-  },
-  "publication": {
-    "path": "episodes/EP01",
-    "primary_document": "research.md",
-    "paths": "relative to repository"
   }
 }
