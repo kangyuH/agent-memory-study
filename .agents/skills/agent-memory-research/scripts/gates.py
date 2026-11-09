@@ -1,4 +1,4 @@
-"""Deterministic checks for artifacts. Editorial findings require an independent reviewer."""
+"""Deterministic checks for research materials and their review records."""
 
 import ipaddress
 import json
@@ -9,24 +9,41 @@ from urllib.parse import urlsplit, urlunsplit
 from outline import WorkflowError, sha256
 
 
-STAGES = {
+SCHEMA = 2
+COMMON_STAGES = {
     "BRIEF_READY": ("episode_brief.md", "scope_contract.json"),
     "PLAN_READY": ("research_plan.md",),
     "SOURCES_VERIFIED": ("sources.json", "references.md", "retrieval_log.md"),
     "EVIDENCE_BUILT": ("evidence_ledger.json", "evidence_matrix.md", "technical_notes.md", "concepts.json"),
+}
+LEGACY_STAGES = {
+    **COMMON_STAGES,
     "RESEARCH_DRAFTED": ("research.md",),
     "RESEARCH_REVIEWED": ("review_research.md", "review_research.json"),
     "PODCAST_DRAFTED": ("podcast_source.md", "notebooklm_source_list.md"),
     "FINAL_REVIEWED": ("review_final.md", "review_final.json"),
     "ACCEPTED": ("acceptance_report.md",),
 }
+STAGES = {
+    **COMMON_STAGES,
+    "PLAN_READY": ("research_plan.md", "research_questions.json"),
+    "MATERIALS_DRAFTED": ("research.md", "coverage.json"),
+    "MATERIALS_REVIEWED": LEGACY_STAGES["RESEARCH_REVIEWED"],
+    "FINAL_REVIEWED": LEGACY_STAGES["FINAL_REVIEWED"],
+    "ACCEPTED": LEGACY_STAGES["ACCEPTED"],
+}
+DIRECT_EVIDENCE = {"FACT", "AUTHOR_CLAIM", "EXPERIMENTAL_FINDING"}
 CATEGORIES = {"FACT", "AUTHOR_CLAIM", "EXPERIMENTAL_FINDING", "INFERENCE", "OPEN_QUESTION"}
 PRIMARY = {"paper", "code", "official", "primary_replication"}
-SCORES = {"facts": 30, "mechanisms": 25, "tradeoffs": 20, "scope": 10, "audio": 10, "traceability": 5}
-PROFILES = {"standard-v1": 85, "strict-v1": 92}
-HARD_GATES = {
+LEGACY_SCORES = {"facts": 30, "mechanisms": 25, "tradeoffs": 20, "scope": 10, "audio": 10, "traceability": 5}
+LEGACY_PROFILES = {"standard-v1": 85, "strict-v1": 92}
+SCORES = {"facts": 30, "coverage": 30, "mechanisms": 15, "conditions": 15, "traceability": 10}
+PROFILES = {"standard-v2": 85, "strict-v2": 92}
+LEGACY_HARD_GATES = {
     "sources", "mechanisms", "traceability", "chronology", "failure_modes", "comparison", "scope", "cross_episode",
 }
+HARD_GATES = LEGACY_HARD_GATES | {"coverage", "conditions"}
+QUESTION_REF = re.compile(r"\[(Q\d{2,})\]")
 CLAIM_REF = re.compile(r"\[(C\d{2,})\]")
 SOURCE_REF = re.compile(r"\[(S\d{2,})\]")
 LOCAL_LINK = re.compile(r"(?<!!)\]\((?!https?://|mailto:|#)([^)\s]+)\)", re.I)
@@ -35,6 +52,12 @@ LOCAL_LINK = re.compile(r"(?<!!)\]\((?!https?://|mailto:|#)([^)\s]+)\)", re.I)
 def require(condition, message):
     if not condition:
         raise WorkflowError(message)
+
+
+def stages(run):
+    schema = run.get("schema", 1)
+    require(schema in (1, SCHEMA), f"不支持的运行清单版本 {schema}")
+    return LEGACY_STAGES if schema == 1 else STAGES
 
 
 def read_json(path):
@@ -134,7 +157,20 @@ def sources(path, as_of):
     return verified
 
 
-def evidence(path, verified, episode):
+def questions(path):
+    entries = unique(records(read_json(path), path.name), "question_id", r"Q\d{2,}")
+    texts = set()
+    for qid, entry in entries.items():
+        fields(entry, ("question", "basis"), qid)
+        require(type(entry.get("required")) is bool, f"{qid} 缺少布尔字段 required")
+        text = " ".join(entry["question"].split()).casefold()
+        require(text not in texts, f"{qid} 的研究问题重复")
+        texts.add(text)
+    require(any(row["required"] for row in entries.values()), "至少需要一个必要研究问题")
+    return entries
+
+
+def evidence(path, verified, episode, question_ids=None):
     entries = unique(records(read_json(path), "evidence_ledger.json"), "claim_id", r"C\d{2,}")
     require(bool(entries), "证据账本为空")
     for cid, entry in entries.items():
@@ -142,6 +178,10 @@ def evidence(path, verified, episode):
         require(entry.get("episode_id") == episode and entry["category"] in CATEGORIES, f"{cid} 分期或类型错误")
         require(entry["confidence"] in {"high", "medium", "low"}, f"{cid} 置信度无效")
         require(type(entry.get("critical")) is bool, f"{cid} 缺少布尔字段 critical")
+        if question_ids is not None:
+            linked = strings(entry.get("question_ids"), f"{cid} 的 question_ids", nonempty=True)
+            require(set(linked) <= question_ids and len(set(linked)) == len(linked),
+                    f"{cid} 引用了未知或重复的研究问题")
         items = records(entry.get("evidence"), cid)
         supported = []
         for item in items:
@@ -150,7 +190,7 @@ def evidence(path, verified, episode):
             require(sid in verified, f"{cid} 引用了未核验或不存在的来源 {sid}")
             require(not item["locator"].startswith(("https://", "http://")), f"{cid} 需要具体章节、页码、表图或代码定位")
             supported.append(verified[sid])
-        if entry["critical"] or entry["category"] in {"FACT", "AUTHOR_CLAIM", "EXPERIMENTAL_FINDING"}:
+        if entry["critical"] or entry["category"] in DIRECT_EVIDENCE:
             require(any(row["kind"] in PRIMARY for row in supported), f"{cid} 缺少一手证据")
         if entry["category"] == "EXPERIMENTAL_FINDING":
             require(isinstance(entry.get("experiment"), dict), f"{cid} 缺少实验条件")
@@ -158,6 +198,31 @@ def evidence(path, verified, episode):
                                           "significance", "conditions"), cid)
     require(any(row["critical"] for row in entries.values()), "需要标出本期核心主张")
     return entries
+
+
+def check_coverage(path, planned, claims, *, require_complete):
+    rows = unique(records(read_json(path), path.name), "question_id", r"Q\d{2,}")
+    require(rows.keys() == planned.keys(), "覆盖表必须记录问题清单中的全部问题")
+    linked = {qid: set() for qid in planned}
+    for cid, claim in claims.items():
+        for qid in claim["question_ids"]:
+            linked[qid].add(cid)
+    blocked = []
+    for qid, row in rows.items():
+        fields(row, ("status", "detail"), qid)
+        status = row["status"]
+        require(status in {"covered", "partial", "unresolved"}, f"{qid} 覆盖状态无效")
+        identifiers = strings(row.get("claim_ids"), f"{qid} 的 claim_ids")
+        require(set(identifiers) == linked[qid] and len(set(identifiers)) == len(identifiers),
+                f"{qid} 的覆盖表与证据账本不一致")
+        gaps = strings(row.get("gaps"), f"{qid} 的 gaps", nonempty=status != "covered")
+        require(status != "covered" or not gaps, f"{qid} 仍有缺口，不可标为 covered")
+        if status in {"covered", "partial"}:
+            require(any(claims[cid]["category"] in DIRECT_EVIDENCE for cid in identifiers),
+                    f"{qid} 缺少一手事实、作者主张或实验结果")
+        if planned[qid]["required"] and status != "covered":
+            blocked.append(qid)
+    require(not require_complete or not blocked, f"必要问题仍有证据缺口 {', '.join(sorted(blocked))}")
 
 
 def referenced(path, pattern, allowed):
@@ -178,17 +243,23 @@ def concepts(path):
     return result
 
 
-def review_files(kind):
+def review_files(kind, run):
     names = (
         "scope_contract.json", "sources.json", "evidence_ledger.json", "evidence_matrix.md",
         "technical_notes.md", "concepts.json", "research.md",
     )
+    legacy = stages(run) is LEGACY_STAGES
+    if not legacy:
+        names += ("episode_brief.md", "research_plan.md", "research_questions.json", "references.md",
+                  "retrieval_log.md", "coverage.json")
     if kind == "final":
-        names += ("review_research.md", "review_research.json", "podcast_source.md", "notebooklm_source_list.md")
+        names += ("review_research.md", "review_research.json")
+        if legacy:
+            names += LEGACY_STAGES["PODCAST_DRAFTED"]
     return names
 
 
-def check_review(path, review_kind, files, run, claim_ids, claims):
+def check_review(path, review_kind, files, run, claim_ids, claims, planned=None):
     review = read_json(path)
     require(isinstance(review, dict), "审核记录应为对象")
     fields(review, ("episode", "reviewer_id", "review_session", "review_method", "verdict"), review_kind)
@@ -200,20 +271,30 @@ def check_review(path, review_kind, files, run, claim_ids, claims):
     if review_kind == "final":
         first = read_json(files["review_research.json"])
         require(review["review_session"] != first["review_session"], "最终审核须使用与母稿审核不同的会话")
-    expected = {name: sha256(files[name]) for name in review_files(review_kind)}
+    expected = {name: sha256(files[name]) for name in review_files(review_kind, run)}
     require(review.get("reviewed_sha256") == expected, "审核记录与当前产物快照不一致")
     gates = review.get("hard_gates")
-    expected_gates = HARD_GATES | ({"audio_consistency", "package"} if review_kind == "final" else set())
+    legacy = stages(run) is LEGACY_STAGES
+    weights = LEGACY_SCORES if legacy else SCORES
+    profiles = LEGACY_PROFILES if legacy else PROFILES
+    expected_gates = (LEGACY_HARD_GATES if legacy else HARD_GATES).copy()
+    if review_kind == "final":
+        expected_gates.add("package")
+        if legacy:
+            expected_gates.add("audio_consistency")
     require(isinstance(gates, dict) and set(gates) == expected_gates and all(v is True for v in gates.values()),
             "独立审核未通过全部硬性门槛")
     scores = review.get("scores")
-    require(isinstance(scores, dict) and set(scores) == set(SCORES)
-            and all(type(v) is int and 0 <= v <= SCORES[key] for key, v in scores.items()),
-            "评分须包含六个维度，分数不能超出权重")
-    require(sum(scores.values()) >= PROFILES[parameters["review_profile"]], "总分低于审核档位阈值")
+    require(isinstance(scores, dict) and set(scores) == set(weights)
+            and all(type(v) is int and 0 <= v <= weights[key] for key, v in scores.items()),
+            "评分须包含本版本要求的维度，分数不能超出权重")
+    require(sum(scores.values()) >= profiles[parameters["review_profile"]], "总分低于审核档位阈值")
     verified = set(strings(review.get("verified_claims"), "verified_claims", nonempty=True))
     critical = {cid for cid in claim_ids if claims[cid]["critical"]}
     require(critical <= verified <= claim_ids, "审核须覆盖本稿所有核心主张且不得引用未知主张")
+    if not legacy:
+        reviewed = strings(review.get("reviewed_questions"), "reviewed_questions", nonempty=True)
+        require(set(reviewed) == planned.keys() and len(reviewed) == len(planned), "独立审核须逐一覆盖所有研究问题")
     issues = unique(records(review.get("issues"), "审核问题"), "issue_id", r"I\d{2,}")
     for issue in issues.values():
         fields(issue, ("severity", "status", "location", "evidence", "fix", "verification"), "审核问题")
@@ -226,7 +307,9 @@ def check_review(path, review_kind, files, run, claim_ids, claims):
 
 
 def check(stage, files, run):
-    for name in STAGES[stage]:
+    contract_stages = stages(run)
+    legacy = contract_stages is LEGACY_STAGES
+    for name in contract_stages[stage]:
         path = files[name]
         require(path.is_file() and not path.is_symlink() and path.stat().st_size > 0, f"缺少有效产物 {name}")
         if name.endswith(".md"):
@@ -239,24 +322,39 @@ def check(stage, files, run):
     if stage == "BRIEF_READY":
         contract = read_json(files["scope_contract.json"])
         require(isinstance(contract, dict) and contract.get("episode") == episode, "范围契约期数错误")
-        for key in ("include", "preview_only", "exclude", "prerequisites"):
+        context = "preview_only" if legacy else "related_context"
+        for key in ("include", context, "exclude", "prerequisites"):
             strings(contract.get(key), key, nonempty=key == "include")
         require(contract["prerequisites"] == run["prerequisites"], "范围契约与课程依赖不一致")
-    if stage in ("BRIEF_READY", "PLAN_READY"):
+        return
+    planned = None if legacy else questions(files["research_questions.json"])
+    if stage == "PLAN_READY":
         return
 
     verified = sources(files["sources.json"], run["parameters"]["as_of_date"])
     if stage == "SOURCES_VERIFIED":
         require(referenced(files["references.md"], SOURCE_REF, verified) == set(verified), "参考文献表未覆盖所有已核验来源")
         return
-    claims = evidence(files["evidence_ledger.json"], verified, episode)
+    claims = evidence(files["evidence_ledger.json"], verified, episode, planned.keys() if not legacy else None)
     if stage == "EVIDENCE_BUILT":
         require(referenced(files["evidence_matrix.md"], CLAIM_REF, claims) == set(claims), "证据矩阵未覆盖全部主张")
         require(all(row["claim_id"] in claims for row in concepts(files["concepts.json"]).values()), "概念登记引用了未知主张")
         return
 
     draft = referenced(files["research.md"], CLAIM_REF, claims)
-    require({cid for cid, row in claims.items() if row["critical"]} <= draft, "母稿漏掉了账本中的核心主张")
+    require({cid for cid, row in claims.items() if row["critical"]} <= draft, "研究汇总漏掉了账本中的核心主张")
+    if not legacy:
+        require(draft == claims.keys(), "研究资料汇总须保留账本中的全部主张")
+        require(referenced(files["research.md"], QUESTION_REF, planned) == planned.keys(),
+                "研究资料汇总须标出全部研究问题")
+        check_coverage(files["coverage.json"], planned, claims, require_complete=stage != "MATERIALS_DRAFTED")
+        if stage in {"MATERIALS_REVIEWED", "ACCEPTED"}:
+            check_review(files["review_research.json"], "research", files, run, draft, claims, planned)
+        if stage in {"FINAL_REVIEWED", "ACCEPTED"}:
+            check_review(files["review_final.json"], "final", files, run, draft, claims, planned)
+        return
+
+    # Historical exports retain their original validation contract.
     if stage in {"RESEARCH_REVIEWED", "ACCEPTED"}:
         check_review(files["review_research.json"], "research", files, run, draft, claims)
     if stage in {"PODCAST_DRAFTED", "FINAL_REVIEWED", "ACCEPTED"}:

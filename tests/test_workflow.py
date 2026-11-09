@@ -68,9 +68,11 @@ class WorkflowTests(unittest.TestCase):
             bounds = json.loads(Path(run["scope_input"]).read_text(encoding="utf-8"))
             self.put(run, "scope_contract.json", {
                 "episode": run["episode"], "include": ["synthetic test only"],
-                "preview_only": [], "exclude": [],
+                "related_context": [], "exclude": [],
                 "prerequisites": [p["episode"] for p in bounds["prerequisites"]],
             })
+        elif stage == "PLAN_READY":
+            self.put(run, "research_questions.json", self.questions())
         elif stage == "SOURCES_VERIFIED":
             self.put(run, "sources.json", [self.source()])
             self.put(run, "references.md", "# Synthetic bibliography\n\n[S01] Fixture source.\n")
@@ -78,15 +80,27 @@ class WorkflowTests(unittest.TestCase):
             self.put(run, "evidence_ledger.json", [self.claim(run["episode"])])
             self.put(run, "evidence_matrix.md", "# Synthetic matrix\n\n[C01] Fixture claim.\n")
             self.put(run, "concepts.json", [{"key": "fixture", "value": "definition A", "claim_id": "C01"}])
-        elif stage == "RESEARCH_DRAFTED":
-            self.put(run, "research.md", "# Synthetic research\n\n[C01] Fixture claim.\n")
-        elif stage == "PODCAST_DRAFTED":
-            self.put(run, "podcast_source.md", "# Synthetic podcast source\n\n[C01] Fixture claim.\n")
-            self.put(run, "notebooklm_source_list.md", "# Synthetic sources\n\n[S01] Fixture source.\n")
-        elif stage in {"RESEARCH_REVIEWED", "FINAL_REVIEWED"}:
+        elif stage == "MATERIALS_DRAFTED":
+            self.put(run, "research.md", "# Synthetic research\n\n[Q01] [C01] Fixture claim.\n[Q02] Open question.\n")
+            self.put(run, "coverage.json", self.coverage())
+        elif stage in {"MATERIALS_REVIEWED", "FINAL_REVIEWED"}:
             filename, review = self.review(run)
             self.put(run, filename, review)
         return run
+
+    def questions(self, *, optional_required=False):
+        return [
+            {"question_id": "Q01", "question": "What does the fixture establish?", "basis": "outline", "required": True},
+            {"question_id": "Q02", "question": "How far can the result generalize?", "basis": "scope",
+             "required": optional_required},
+        ]
+
+    def coverage(self):
+        return [
+            {"question_id": "Q01", "status": "covered", "detail": "fixture", "claim_ids": ["C01"], "gaps": []},
+            {"question_id": "Q02", "status": "unresolved", "detail": "optional follow-up", "claim_ids": [],
+             "gaps": ["searched the fixture source; transfer data was unavailable"]},
+        ]
 
     def source(self, **changes):
         return {
@@ -101,6 +115,7 @@ class WorkflowTests(unittest.TestCase):
         return {
             "claim_id": "C01", "episode_id": episode, "category": "FACT",
             "statement": "Synthetic fixture proposition", "critical": True, "confidence": "high",
+            "question_ids": ["Q01"],
             "counterevidence": "fixture", "limitation": "fixture", "disposition": "fixture",
             "evidence": [{"source_id": "S01", "locator": "fixture heading", "note": "synthetic"}],
             **changes,
@@ -108,13 +123,13 @@ class WorkflowTests(unittest.TestCase):
 
     def review(self, run, **changes):
         final = run["next_stage"] == "FINAL_REVIEWED"
-        flags = gates.HARD_GATES | ({"audio_consistency", "package"} if final else set())
+        flags = gates.HARD_GATES | ({"package"} if final else set())
         return ("review_final.json" if final else "review_research.json", {
             "episode": run["episode"], "reviewer_id": "fixture-reviewer",
             "review_session": "fixture-final" if final else "fixture-research",
             "review_method": "independent_session", "verdict": "pass",
             "reviewed_sha256": run["reviewed_sha256"],
-            "verified_claims": ["C01"], "scores": gates.SCORES,
+            "verified_claims": ["C01"], "reviewed_questions": ["Q01", "Q02"], "scores": gates.SCORES,
             "hard_gates": dict.fromkeys(flags, True), "issues": [], **changes,
         })
 
@@ -140,7 +155,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(index["episodes"]["EP03"]["prerequisites"], ["EP02"])
         run = self.until(self.start(), "ACCEPTED")
         release = self.call("release", "--run", run["run_dir"])
-        self.assertTrue((Path(release["release_dir"]) / "podcast_source.md").is_file())
+        self.assertTrue((Path(release["release_dir"]) / release["primary_document"]).is_file())
 
     def test_expected_course_counts_detect_missing_trailing_episode(self):
         self.call("index", "--outline", self.outline, "--expected-episodes", 4, error="期数与预期不符")
@@ -166,8 +181,28 @@ class WorkflowTests(unittest.TestCase):
                                  ("ACCEPTED", 1, 1))
                 self.assertEqual(manifest["parameters"]["episode"], episode)
                 self.assertEqual(len(manifest["audits"]), 2)
-                self.assertTrue((package / "podcast_source.md").is_file())
+                self.assertEqual(release["primary_document"], "research.md")
+                self.assertTrue((package / "research.md").is_file())
+                self.assertFalse((package / "podcast_source.md").exists())
+                self.assertEqual(manifest["coverage_counts"], {"covered": 1, "partial": 0, "unresolved": 1})
                 self.assertEqual(self.call("release", "--run", run["run_dir"]), release)
+
+    def test_export_keeps_all_verified_sources_without_a_shortlist(self):
+        run = self.setup_stage(self.until(self.start(), "PLAN_READY"))
+        sources = [self.source(source_id=f"S{i:02}", url=f"https://www.iana.org/domains/reserved?fixture={i}")
+                   for i in range(1, 7)]
+        self.put(run, "sources.json", sources)
+        self.put(run, "references.md", "# Synthetic bibliography\n\n" +
+                 "\n".join(f"[{row['source_id']}] Fixture source." for row in sources))
+        run = self.until(self.advance(run), "ACCEPTED")
+        release = self.call("release", "--run", run["run_dir"])
+        package = Path(release["release_dir"])
+        manifest = json.loads((package / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["source_count"], 6)
+        self.assertFalse((package / "notebooklm_source_list.md").exists())
+        manifest["coverage_counts"]["unresolved"] = 0
+        (package / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        self.call("release", "--run", run["run_dir"], error="覆盖统计与研究资料不一致")
 
     def test_engineering_and_frontier_entries_reach_plan(self):
         for episode, token in (("EP19", "No-op"), ("EP36", "Self-Evolving")):
@@ -202,23 +237,56 @@ class WorkflowTests(unittest.TestCase):
             self.source(source_id="S02", url="https://www.iana.org/help", doi="10.1000/SAME")])
         self.advance(run, error="重复")
 
-    def test_missing_citations_and_unsupported_audio_claim(self):
+    def test_question_and_claim_references_are_checked(self):
         run = self.setup_stage(self.until(self.start(), "SOURCES_VERIFIED"))
         self.put(run, "evidence_ledger.json", [self.claim("EP01", evidence=[
             {"source_id": "S99", "locator": "§1", "note": "unverified"},
         ])])
         self.advance(run, error="未核验或不存在的来源")
-        run = self.until(run, "RESEARCH_REVIEWED")
-        self.setup_stage(run)
-        self.put(run, "podcast_source.md", "# Audio\n\n[C99] New claim.\n")
+        self.put(run, "evidence_ledger.json", [self.claim("EP01", question_ids=["Q99"])])
+        self.advance(run, error="未知或重复的研究问题")
+        run = self.setup_stage(self.until(run, "EVIDENCE_BUILT"))
+        self.put(run, "research.md", "# Research\n\n[Q01] [Q02] [C99] Unknown claim.\n")
         self.advance(run, error="未知编号")
+        self.put(run, "research.md", "# Research\n\n[Q01] [C01] Missing planned question.\n")
+        self.advance(run, error="标出全部研究问题")
+
+    def test_coverage_table_cannot_hide_questions_claims_or_gaps(self):
+        run = self.setup_stage(self.until(self.start(), "EVIDENCE_BUILT"))
+        a, b = self.coverage()
+        self.put(run, "coverage.json", [a])
+        self.advance(run, error="全部问题")
+        self.put(run, "coverage.json", [{**a, "claim_ids": []}, b])
+        self.advance(run, error="与证据账本不一致")
+        self.put(run, "coverage.json", [a, {**b, "status": "covered"}])
+        self.advance(run, error="仍有缺口")
+        self.put(run, "coverage.json", [a, {**b, "status": "covered", "gaps": []}])
+        self.advance(run, error="缺少一手事实")
+
+    def test_required_evidence_gap_blocks_acceptance(self):
+        run = self.setup_stage(self.until(self.start(), "BRIEF_READY"))
+        self.put(run, "research_questions.json", self.questions(optional_required=True))
+        run = self.advance(run)
+        run = self.setup_stage(self.until(run, "MATERIALS_DRAFTED"))
+        self.advance(run, error="必要问题仍有证据缺口 Q02")
+        self.assertEqual(self.call("status", "--run", run["run_dir"])["checkpoint"], "MATERIALS_DRAFTED")
+        self.call("release", "--run", run["run_dir"], error="已验收")
+
+    def test_noncritical_counterevidence_must_survive_aggregation(self):
+        run = self.setup_stage(self.until(self.start(), "SOURCES_VERIFIED"))
+        extra = self.claim("EP01", claim_id="C02", critical=False, statement="Contrary fixture proposition")
+        self.put(run, "evidence_ledger.json", [self.claim("EP01"), extra])
+        self.put(run, "evidence_matrix.md", "# Synthetic matrix\n\n[C01] [C02] Fixture claims.\n")
+        run = self.setup_stage(self.advance(run))
+        self.advance(run, error="须保留账本中的全部主张")
 
     def test_reviewer_gates_and_snapshot_binding(self):
-        run = self.setup_stage(self.until(self.start(), "RESEARCH_DRAFTED"))
+        run = self.setup_stage(self.until(self.start(), "MATERIALS_DRAFTED"))
         for changes, error in [
             ({"reviewer_id": "codex-writer"}, "独立上下文"),
             ({"reviewed_sha256": {}}, "快照不一致"),
             ({"hard_gates": {}}, "硬性门槛"),
+            ({"reviewed_questions": ["Q01"]}, "逐一覆盖所有研究问题"),
             ({"scores": dict.fromkeys(gates.SCORES, 0)}, "低于审核"),
             ({"issues": [{"issue_id": "I01", "severity": "BLOCKER", "status": "open", "location": "claim",
                           "evidence": "wrong fact", "fix": "remove", "verification": "check"}]}, "阻塞项"),
@@ -227,7 +295,7 @@ class WorkflowTests(unittest.TestCase):
                 name, review = self.review(run, **changes)
                 self.put(run, name, review)
                 self.advance(run, error=error)
-        run = self.setup_stage(self.until(run, "PODCAST_DRAFTED"))
+        run = self.setup_stage(self.until(run, "MATERIALS_REVIEWED"))
         name, review = self.review(run, review_session="fixture-research")
         self.put(run, name, review)
         self.advance(run, error="不同的会话")
@@ -241,12 +309,12 @@ class WorkflowTests(unittest.TestCase):
         resumed = self.call("resume", "--run", run["run_dir"], "--reason", "access restored")
         self.assertEqual(resumed["artifacts"], run["artifacts"])
         self.assertNotEqual(resumed["work_dir"], run["work_dir"])
-        run = self.until(resumed, "RESEARCH_DRAFTED")
+        run = self.until(resumed, "MATERIALS_DRAFTED")
         old_draft = Path(run["artifacts"]["research.md"]["path"])
         rewind = self.call("rewind", "--run", run["run_dir"], "--to", "EVIDENCE_BUILT", "--reason", "revise")
         self.assertTrue(old_draft.is_file())
         self.assertNotIn("research.md", rewind["artifacts"])
-        run = self.until(rewind, "RESEARCH_DRAFTED")
+        run = self.until(rewind, "MATERIALS_DRAFTED")
         self.call("rewind", "--run", run["run_dir"], "--to", "EVIDENCE_BUILT", "--reason", "again",
                   error="修订上限")
 
